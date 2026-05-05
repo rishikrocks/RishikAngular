@@ -1,0 +1,25 @@
+<!-- 1//Have a paragraph and a toggle button; on clicking the button, control the visibility (Show / Hide) of the paragraph. -->
+
+<p [hidden] ="flag">Hello, good Morning</p>
+
+<button (click)="toggleFlag()" >Paragraph-button</button>
+
+
+
+<div >{{state}}</div>
+
+<!-- 3//create a input box, toggle the type of that input box to (text/password) -->
+<input [type]="temp" placeholder="Enter Some Value">
+<button (click)="changeType()">change</button>
+
+<!-- 4//Create a counter example with three controls -->
+
+<div  >{{count}}</div>
+
+<button (click)="increment()">Inc</button>
+<button (click)="decrement()">Dec</button>
+<button (click)="reset()">reset</button>
+<!--Increment, Decrement, and Reset.-->
+
+
+

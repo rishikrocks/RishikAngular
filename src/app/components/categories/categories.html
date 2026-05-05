@@ -1,0 +1,9 @@
+<div class="container">
+  <div class="row">
+      @for(categoryObj of categoryArr; track $index){
+        <div class="col">
+              <app-category-item [categoryObj] = "categoryObj"> </app-category-item>
+        </div>
+      }
+  </div>
+</div>

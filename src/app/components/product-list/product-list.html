@@ -1,0 +1,59 @@
+<div class="container">
+
+  <div style="display: flex; gap: 12px; margin-bottom: 20px;">
+    <button (click)="openSweetAlert()"
+      style="background: linear-gradient(135deg, #f97316, #ea580c); color: white; border: none; padding: 10px 18px; border-radius: 10px;">
+      SweetAlert
+    </button>
+
+    <button (click)="openSnackbar()"
+      style="background: linear-gradient(135deg, #0f766e, #14b8a6); color: white; border: none; padding: 10px 18px; border-radius: 10px;">
+      SnackBar
+    </button>
+  </div>
+  <div style="display: flex; justify-content: center; margin: 24px 0;">
+    <input type="text" [(ngModel)]="searchText" (input)="validateAndFilter()" placeholder="Search by title"
+      [style.width]="'420px'" [style.padding]="'12px 16px'" [style.fontSize]="'18px'"
+      [style.border]="'2px solid ' + (isSearchInvalid ? 'red' : '#ccc')" [style.borderRadius]="'10px'"
+      [style.outline]="'none'">
+  </div>
+  <div style="display: flex; justify-content: center; gap: 12px; margin-bottom: 20px;">
+    <button (click)="sortAsc()">Price Asc</button>
+    <button (click)="sortDesc()">Price Desc</button>
+  </div>
+  <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
+   <select [(ngModel)]="selectedCategory" (change)="filterByCategory()">
+      <option value="">All Categories</option>
+      <option value="beauty">Beauty</option>
+      <option value="fragrances">Fragrances</option>
+      <option value="furniture">Furniture</option>
+    </select>
+  </div>
+  <div class="row">
+    @for (product of productArr | paginate: { itemsPerPage: 4, currentPage: p }; track $index) {
+    <div class="col-sm-3">
+      <div class="card text-center">
+        <img [src]="product.images[0]" alt="...">
+        <div class="card-body" appZoomin>
+          <h5 class="card-title">{{product.id}}</h5>
+          <p class="card-text">{{product.title}}</p>
+          <p class="card-text">{{product.category}}</p>
+          <p class="card-text">price : {{product.price}}</p>
+          <p class="card-text">rating : {{product.rating}}
+            <fa-icon [icon]="faStar"></fa-icon>
+          </p>
+          <button class="btn btn-primary mx-1" [routerLink]="['/productdetails']"
+            [queryParams]="{id:product.id,name:product.title,price:product.price}">
+            Details
+          </button>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+
+  <div class="pagination-wrapper">
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  </div>
+
+</div>

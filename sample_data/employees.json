@@ -1,0 +1,13 @@
+{
+  "employees": [
+    {
+      "firstName": "Virat",
+      "lastName": "Kohli",
+      "email": "virat@gmail.com",
+      "gender": "male",
+      "sal": 5200,
+      "id": "101"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

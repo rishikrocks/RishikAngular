@@ -1,0 +1,105 @@
+<h3 class="text-center">Lets learn Angular Pipe </h3>
+<div class="border border-2 rounded-2 p-2 m-2">
+    <div>lowercase,uppercase,titlecase pipe</div>
+    <div>username with </div>
+    <div>{{userName}}</div>
+    <div>{{ userName | uppercase}}</div>
+    <div>{{ userName | lowercase}}</div>
+    <div>{{ userName | titlecase}}</div>
+</div>
+
+<div class="border border-2 rounded-2 p-2 m-2">
+    <div>Currency Pipe</div>
+    <div>{{Salary}}</div>
+    <div>{{Salary |currency}}</div>
+    <div>{{Salary |currency:'INR'}}</div>
+    <div>{{Salary |currency:'&euro;'}}Euro</div>
+    <div>{{Salary |currency:'&yen;'}}Yen</div>
+    <!-- input | pipeName :arg1 :arg2 -->
+</div>
+
+<div class="border border-2 rounded-2 p-2 m-2">
+    <div>{{dateObj}}</div>
+    <div>{{dateObj | date}}</div>
+    <div>{{dateObj | date: 'short'}}</div>
+    <div>{{dateObj | date: 'medium'}}</div>
+    <div>{{dateObj | date: 'long'}}</div>
+    <div>{{dateObj | date: 'full'}}</div>
+</div>
+<div class="border border-2 rounded-2 p-2 m-2">
+    <div>{{dateObj | date: 'shortDate'}}</div>
+    <div>{{dateObj | date: 'mediumDate'}}</div>
+    <div>{{dateObj | date: 'longDate'}}</div>
+    <div>{{dateObj | date: 'fullDate'}}</div>
+</div>
+    
+<div class="border border-2 rounded-2 p-2 m-2">
+      <div>{{dateObj | date: 'shortTime'}}</div>
+    <div>{{dateObj | date: 'mediumTime'}}</div>
+    <div>{{dateObj | date: 'longTime'}}</div>
+    <div>{{dateObj | date: 'fullTime'}}</div>
+</div>
+
+<div class="border border-2 rounded-2 p-2 m-2"></div>
+    <div>{{dateObj | date: 'dd-MM-yyy'}}</div>
+    <div>{{dateObj | date: 'hh:mm:ss a'}}</div>
+    <div>{{dateObj | date: 'fullTime: "UTC'}}</div>
+    <div>{{dateObj | date: 'fullTime: "IST'}}</div>
+    <div>{{dateObj | date: 'EEEE'}}</div>
+
+    <div class="border border-2 rounded-2 p-2 m-2">
+        <div>Number Pipe</div>
+        <div>{{1000000 | number}}</div>
+        <div>{{12.11122333 | number:'3.2-5'}}</div>
+        <div>{{12.5 | number:'3.2-5'}}</div>
+        <div>{{0.5 | number:'3.2-5'}}</div>
+    </div>  
+
+    <div  class="border border-2 rounded-2 p-2 m-2">
+        <div>{{12.5 | percent}}</div>
+         <div>{{12.5 | percent:'3.2-5'}}</div>
+        <div>{{0.035 | percent}}</div>
+    </div>
+
+     <div class="border border-2 rounded-2 p-2 m-2">
+        <div> json and keyvalue pipe :</div>
+        <div>{{user}}</div>
+        <div>{{user | json}}</div>
+     </div>
+
+    <div  class="border border-2 rounded-2 p-2 m-2">  
+         @for(entry of user | keyvalue; track $index){
+                <h4>{{entry.key}} === {{entry.value}}</h4>
+            }
+    </div>
+
+    <div class="border border-2 rounded-2 p-2 m-2">
+        Slice Pipe can be used with Array and String
+        <div>{{cars}}</div>
+        <div>{{cars | slice : 2 : 4}}</div>
+        <div>{{'Angular is a FrameWork' | slice : 0 : 7}}</div>
+        <div>{{'Angular is a FrameWork' | slice : 0 : -4}}</div>
+    </div>
+    
+    <div class="border border-2 rounded-2 p-2 m-2">
+        <textarea [(ngModel)]="msg" maxlength="100"></textarea>
+        <div>message : {{msg}}</div> 
+        <div>Remaining Chars : {{msg | remaining}}</div>
+    </div>
+
+    <div class="border border-2 rounded-2 p-2 m-2">
+        <h3>Need of Impure Pipe</h3>
+        @for(item of arr | mysort; track $index){
+            <b>{{item}} &nbsp;</b>
+        }
+    </div>
+
+    <div>
+    <input type="number" #newNum />
+    <button class="mx-1" (click)="arr.push(+newNum.value)">
+         Add new num
+    </button>
+  </div>
+<!-- </div> -->
+
+

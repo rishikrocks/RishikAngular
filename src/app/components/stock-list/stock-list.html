@@ -1,0 +1,13 @@
+<h3 class = "text-center">Stock List</h3>
+
+<table class="table table-bordered">
+    <tbody>
+        @for(stockObj of stockData | async; track $index){
+            <tr>
+                <td>{{stockObj.tickerSymbol}}</td>
+                <td>{{stockObj.marketCap}}</td>
+                <td>{{stockObj.currentRatio}}</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,20 @@
+<div class="row border border-3 p-2 text-center mt-2">
+    <div>This is Parent Component</div>
+    <div>
+        My OWN data a :{{a}}
+        <input type="number" [(ngModel)]="a">
+    </div>
+    <div>My Child2 Data b: {{child2.b}}</div>
+    <div>My Child's Data courseName:{{parentCourseName}}</div>
+
+    <div class="col-sm-6 border border-3 p-2">
+        <app-child1-demo [a]="a" [b]="child2.b" (courseEvent)="receiveCourseData($event)"></app-child1-demo>
+    </div>
+    <div class="col-sm-6 border border-3 p-2">
+        <app-child2-demo [aChild2]="a" #child2>
+            <div #parentContent>This is Content from Parent</div>
+        </app-child2-demo>
+    </div>
+</div>
+<app-cart [cartItems]="cartItems"></app-cart>
+<button (click)=addItem()> Add Item</button>

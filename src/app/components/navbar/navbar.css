@@ -1,0 +1,14 @@
+.navbar .nav-link:not(.disabled),
+.navbar .navbar-brand {
+  border-radius: 4px;
+  padding-left: 10px;
+  padding-right: 10px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.navbar .nav-link:not(.disabled):hover,
+.navbar .navbar-brand:hover,
+.navbar .dropdown-item:hover {
+  background-color: #ffc107;
+  color: #111827;
+}

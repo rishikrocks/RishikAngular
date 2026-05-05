@@ -1,0 +1,9 @@
+<p>cart works!</p>
+<div>Items:{{itemCount}}</div>
+<div>Total:{{total}}</div>
+
+<ul>
+    @for(item of cartItems; track $index){
+        <li>{{item.name}} {{item.price}}</li>
+    }
+</ul>

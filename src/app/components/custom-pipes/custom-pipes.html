@@ -1,0 +1,47 @@
+<p>custom-pipes works!</p>
+
+<div style="text-align: center;">
+    <h2>ASSIGNMENT - CUSTOM PIPES</h2>
+</div>
+
+<div>
+        <h3>Conversion - Ordinal Format</h3>
+        <input type="number" [(ngModel)]="num" placeholder="Enter number">
+        <div>{{ num | ordinal }}</div>
+    </div>
+
+    <div>
+        <h3>Conversion - Credit Card Format</h3>
+        <input type="text" [(ngModel)]="cardNo" placeholder="Enter card number">
+        <div>{{ cardNo | creditCard }}</div>
+
+    </div>
+
+    <div>
+        <h3>Conversion - Age Format</h3>
+        <input type="date" [(ngModel)]="dob">
+        <div>{{ dob | age }}</div>
+
+    </div>
+
+    <div>
+        <h3>Employee Table</h3>
+        <input type="text" [(ngModel)]="searchText" placeholder="Search employee by name">
+        <table border="1" cellpadding="8" style="text-align: center;">
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Salary</th>
+            </tr>
+
+            @for (emp of employees | empSearch: searchText; track emp.id) {
+            <tr>
+                <td>{{ emp.id }}</td>
+                <td>{{ emp.name | salutation: emp.gender }}</td>
+                <td>{{ emp.gender }}</td>
+                <td>{{ emp.salary }}</td>
+            </tr>
+            }
+        </table>
+ </div>

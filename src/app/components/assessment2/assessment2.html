@@ -1,0 +1,39 @@
+<h3 class = "text-center"> Assessment-2</h3>
+<!--Greeting based on time-->
+
+<!--8. Create two input boxes and a dropdown (+ , - , * , /) and perform arithmetic operations based on the selected operator.-->
+<input type="number" [(ngModel)]="number1">
+<input type="number" [(ngModel)]="number2">
+<select [(ngModel)]="operator">
+    <option>+</option>
+    <option>-</option>
+    <option>*</option>
+    <option>/</option>
+</select>
+<button (click)="calculate()">calculate</button>
+    <div> Result :{{ result }}</div>
+
+<br>
+<p [style.font-size]="size +'px'">Hello,Good morning</p>
+<button (click)="increase()">Increase</button>
+<button (click)="decrease()">Decrease</button>
+
+<br>
+
+
+<select [(ngModel)]="color">
+    <option value="Red">Red</option>
+    <option value = "Blue">Blue</option>
+    <option value = "Green">Green</option>
+    <option value = "Yellow">Yellow</option>
+    </select>
+<div [style.backgroundColor] ="color">{{color}}</div>
+
+<h3 class="text-center">DataBinding Assignment Practice</h3>
+<!-- Greeting based on the time(Good Morning,Good AfterNoon,Good Evening)-->
+
+<div class="border border-4 rounded-3 p-3 m-4">
+    <input type="time" [(ngModel)] = "currentTime">
+    <div> Current Time:: {{currentTime}} </div>
+    <div> Greetings:: {{displayGreetings()}} </div>
+</div>

@@ -1,0 +1,69 @@
+<h2 class = "text-center">Let's learn databinding</h2>
+
+<div class="class border border-3 rounded-3 p-3">
+    <div> Interpolation and PropertyBinding</div>
+    <div> Name:{{myName}} </div> <!--Display the one variable that you have displayed in databindings.ts-->
+    <div> Expression:{{586.25}}</div>
+    <div>[(ngModel)] = "myName"</div> <!--Its a two way databinding-->
+
+    <div class = "mt-2">
+      <label for="name">Name:</label>
+       <input id="name" type="text" value="{{myName}}" /> <!--Interpolation -->
+        <!-- <input bind-value="myName"> Another way of interpolation -->
+        <!-- <input [value]="myName"> Propertybinding -->
+        <!-- <input [(ngModel)]="myName" [maxlength]="max_length"> -->
+    </div>
+
+    <div>
+    <img src="{{img_url}}" alt="" width="300" height="400"> <!--Interpolation-->
+    <img [src] = "img_url" alt="" width="300" height="400"> <!--PropertyBinding-->
+    <img bind-src = "img_url" alt="" width="300" height="400"> <!--PropertyBinding-->
+    </div>
+    
+
+
+    <div mt-2>
+
+        <button class = "btn btn-success" disabled = {{flag1}}>Click Me</button> 
+        <button class = "btn btn-success" [disabled] = "flag1">Click Me</button>
+        <button class = "btn btn-success">Click Me</button>
+        <button class = "btn btn-success">Click Me</button>
+
+        <span> Flag:{{flag1}}</span>
+        <button click = "toggleFlag2()" class = "btn btn-success">CLICK ME</button>
+        <button on-click="toggleFlag2()" class ="btn btn-success">CLICK ME</button>
+    </div>
+
+    <table class="table table-bordered">
+        <tbody>
+  <tr>
+    <th>Item</th>
+    <!-- This cell spans 2 columns -->
+    <th [attr.colspan]="column_span">Details</th>
+  </tr>
+   <tr>
+    <td>Top</td>
+    <td>Size: S</td>
+    <td>Color: Green</td>
+  </tr>
+  <tr>
+    <td>T-Shirt</td>
+    <td>Size: M</td>
+    <td>Color: Blue</td>
+  </tr>
+  <tr>
+    <td>Hoodie</td>
+    <td>Size: L</td>
+    <td>Color: Grey</td>
+  </tr>
+   <tr>
+    <td>Puffer Jacket</td>
+    <td>Size: XL</td>
+    <td>Color: Brown</td>
+  </tr>
+  </tbody>
+</table>
+
+</div>
+
+

@@ -1,0 +1,10 @@
+<p>demo works!</p>
+
+<select  [(ngModel)] = "colorselect">
+        <option value = "red"> RED</option>
+         <option value = "yellow"> YELLOW</option>
+        <option value = "green"> GREEN</option>
+  </select>
+  <div [style.backgroundColor] = "colorselect">
+    Changing Color
+  </div>

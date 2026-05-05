@@ -1,0 +1,4059 @@
+program-1:Use bootstrap 
+-----------------------
+1. npm install bootstrap
+2. add the below line in 'styles.css'
+	@import 'bootstrap/dist/css/bootstrap.css';
+3. add "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" in angular.json
+   projects ->architect->build->scripts:[]  
+   
+Note: As alternate to point-3, the below code can be added in index.html
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+
+
+program-2:display Local image
+-----------------------------
+1. place the images insstaride 'public' folder (project1/public/images)
+2. use it in HTML file
+   <img src='images/sachin.jpg' />
+  
+
+
+	
+program-3:interpolation and property binding
+----------------------------------------
+import { Component } from '@angular/core';
+@Component({
+    selector: 'my-app',
+    template: `<div>
+                    <h1 [innerHtml]='myText'></h1>
+                    <img [src]='imagePath'/>
+					<img bind-src ='imagePath'/>
+					<h2 [innerHtml]='2+3'></h2>
+                    <hr>
+                    <h1>{{myText}}</h1>
+                    <img src='{{imagePath}}'/>
+					<h2>{{2+3}}</h2>
+                </div>`
+})
+export class AppComponent {
+    myText: string = 'Interpolation';
+    imagePath: string = 'https://angular.io/assets/images/logos/angular/logo-nav@2x.png';
+}
+
+
+program-4:interpolation vs property binding
+-------------------------------------------
+->to set an element property to a non-string data value, property binding should be used and not interpolation binding
+
+import { Component } from '@angular/core';
+@Component({
+    selector: 'my-app',
+    template: `<div>
+    <button disabled='{{isDisabled}}'>Try Me</button>
+    <br/><br/>
+    <button [disabled]='isDisabled'>Try Me</button>
+	<br/><br/>
+	<button bind-disabled='isDisabled'>Try Me</button>
+                     </div>`
+})
+export class AppComponent {
+isDisabled: boolean = false;
+}
+
+
+program-5:interpolation vs property binding
+-------------------------------------------
+->for String Concatination, interpolation binding should be used insteadof property binding
+
+import { Component } frpom '@angular/core';
+@Component({
+    selector: 'my-app',
+    template: `<div>
+                    <h1>My Name is {{myText}}</h1>
+                    <img src='https://angular.io/{{imagePath}}'/>
+					
+
+		<h1> a is {{a}} b is {{b}} addition is {{a+b}}</h1>
+
+		<h1>{{ 'a is '+a+' b is '+b+' additon is '+(a+b) }}</h1>
+                </div>`
+})
+export class AppComponent {
+    name: string = 'Sachin Tendulkar';
+    imagePath: string = 'assets/images/logos/angular/logo-nav@2x.png';
+}
+
+
+program-6:Event binding
+-----------------------
+@Component({
+    selector: 'my-app',
+    template: `<div>
+                    <h1>click the below button to invoke the function</h1>
+                    <button (click)="f1()">btn-1</button>
+                    <br/><hr/>
+                    <h1 [hidden]='flag'>Show/Hide this Paragraph By Clicking the Below Button</h1>
+                    <button (click)="flag = !flag" >btn-2</button>
+                </div>`
+})
+export class AppComponent {
+  flag:boolean = false;
+  f1(){
+    alert("I am f1")
+  }
+}
+
+
+
+program-7:Property-Binding vs Attribute-Binding
+===============================================
+-Attributes exist in the HTML markup. Attribute values are static and are not updated dynamically
+-Properties exist on the DOM nodes in real-time. Any changes to myName in the component will be reflected in the input.
+
+<input type="text" [value]="myName" />
+<input type="text" [attr.value]="myName" />
+<button class="btn btn-primary" (click)="myName='Rahul'">Change Name</button>
+
+
+
+
+Program-8:Dark/Light Mode
+=========================
+changeTheme() {
+    this.flag = !this.flag;
+    if (this.flag) {
+      document.body.style.backgroundColor = 'white';
+    } else {
+      document.body.style.backgroundColor = 'black';
+    }
+}
+
+
+
+
+program-9:Template Reference Variable
+=====================================
+import { Component } from '@angular/core';
+@Component({
+    selector: 'my-app',
+    template: `<div>
+                    number1:
+                    <input #num1 /> <br/><br/>
+                    number2:
+                    <input ref-num2 /> <br/><br/>
+
+                    <button (click)="add(num1.value,num2.value)">Add</button>
+                </div>`
+})
+export class AppComponent {
+  add(a,b){
+    alert(Number(a)+Number(b));
+  }
+}
+
+
+program-10 : Two-way data binding
+===============================
+import { FormsModule } from '@angular/forms';
+imports: [FormsModule]
+  
+import { Component } from '@angular/core';
+@Component({
+    selector: 'my-app',
+    template : `<div>
+        <input [(ngModel)]="name" />
+		<input bindon-ngModel='name' />
+        Your Name is: {{name}}
+    </div>`
+})
+export class AppComponent {
+}
+
+
+Character & Word Count
+======================
+userInput: string = '';
+get characterCount(): number {
+   return this.userInput.length;
+}
+get wordCount(): number {
+   if (!this.userInput.trim()) return 0;
+   return this.userInput.trim().split(/\s+/).length;
+}
+----------
+<h2>Live Text Stats</h2>
+<textarea [(ngModel)]="userInput" rows="6" placeholder="Start typing..."></textarea>
+<div class="stats">
+   <p><strong>Character Count:</strong> {{ characterCount }}</p>
+   <p><strong>Word Count:</strong> {{ wordCount }}</p>
+</div>
+  
+
+
+
+
+Program-11: View Encapsulation
+-----------------------------
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>MyProject1</title>
+  <base href="/">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    .hello {
+      font-size: 40px;
+      border: 5px solid red;
+	  
+    }
+  </style>
+</head>
+<body>
+  <my-root>Loading...</my-root>
+  <p class="hello">This is a paragraph from index.html file</p>
+</body>
+</html>
+*********************
+import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
+
+@Component({
+  selector: 'my-root',
+  template: "<div class='hello'>Hello World</div>",
+  encapsulation: ViewEncapsulation.None,
+  //encapsulation: ViewEncapsulation.None/Native/Emulated(Default),
+  styles: ['.hello{background-color:green;']
+})
+export class AppComponent {
+
+}
+
+
+program-12:Template Reference Variable @viewChild
+==================================================
+import { Component, ViewChild } from '@angular/core';
+
+@Component({
+  selector: 'my-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  @ViewChild('name') nameRef;
+  @ViewChild('age') ageRef;
+
+  myName;
+  myAge;
+  showData() {    
+    this.myName = this.nameRef.nativeElement.value;
+    this.myAge = this.ageRef.nativeElement.value;
+    alert(`${this.myName} ${this.myAge}`)
+  }
+}
+*******************
+<h1>Using Template Reference variable in component file</h1>
+Name: <input #name><br><br>
+Age: <input ref-age><br><br>
+<button (click)='showData()'>get Date</button>
+
+
+
+program-13: Conditional Display Using @if()
+===========================================
+    @if(num%2 == 0){
+        <h4>{{num}} is Even </h4>
+    }@else{
+        <h4>{{num}} is Odd </h4>
+    }
+
+----------OR---------
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  template: `
+  <ng-template 
+  *ngIf="x%2==0;then evenBlock; else oddBlock">
+</ng-template>
+
+<ng-template #evenBlock>
+  <p>
+    {{x}} is an even number
+  </p>
+</ng-template>
+
+<ng-template #oddBlock>
+  <p>
+  {{x}} is an odd number
+  </p>
+</ng-template>  
+  `
+})
+export class AppComponent {
+  x: number = 9;
+}
+
+
+
+program-14: ngswitch directive
+==================================
+import { Component } from '@angular/core';
+@Component({
+  selector: 'app-root',
+  template: `
+	@switch (num) {
+        @case (1) { <h1>Monday</h1> }
+        @case (2) { <h1>Tuesday</h1> }
+        @case (3) { <h1>Wednesday</h1> }
+        @case (4) { <h1>Thursday</h1> }
+        @case (5) { <h1>Friday</h1> }
+        @case (6) { <h1>Saturday</h1> }
+        @case (7) { <h1>Sunday</h1> }
+        @default { <h1>Not a Valid number</h1>> }
+    }  
+  `
+})
+export class AppComponent {
+  x: number = 2;
+}
+
+
+
+
+program-15:class binding
+==============================
+import { Component } from '@angular/core';
+
+@Component({
+    selector: 'my-app',
+    styles:['.myClass{color:red;border:5px solid green;}'],
+    template: `
+    <h1>
+      <p [class.myClass]='flag'> Add a class to an element </p>
+      <p [ngClass]="myClasses"> Add Multiple classes to an element </p>
+      <p [ngClass]="myFunction()"> Add Multiple classes to an element </p>
+	  <button class="btn" [ngClass]="flag ? 'btn-success' : 'btn-danger'">
+		Class Binding example
+		</button>
+    </h1>`
+})
+export class AppComponent {
+    flag : boolean = true;
+    myClasses = {
+      class1 : true,
+      class2 : false,
+      class3 : true
+    } 
+    myFunction(){
+      return this.myClasses;
+    }
+}
+
+
+
+
+
+program-16:style binding
+========================
+import { Component } from '@angular/core';
+
+@Component({
+    selector: 'my-app',
+    template: `
+    <h1>
+      <p [style.color]="num % 2 == 0 ? 'blue' : 'red'"> Add a style </p>
+      <p [style.fontSize.px]='48'> Add style with unit </p>
+      <p [style.background-color]=" flag?'green':'blue' "> Add style conditionally </p>
+      <p [ngStyle]="myStyles"> NgStyle for multiple values </p>
+      <p [ngStyle]="myFunction()"> NgStyle for multiple values </p>
+    </h1>`
+})
+export class AppComponent {
+    flag : boolean = true;
+    myStyles = {
+        'background-color': 'lime',
+        'font-size': '20px',
+        'border': '5px dotted red',
+        'padding':'20px'
+    }
+    myFunction(){
+      return this.myStyles;
+    }
+}
+
+
+<div>States datalist</div>
+	<input list="states" name="state" id="state" [(ngModel)]="selectedState">
+    <datalist id="states">
+        @for(state of statesArr;track $index){
+           <option>{{state}}</option>
+        }
+    </datalist>
+<div>Selected state: {{selectedState}}</div>		
+		
+		
+
+program-17: ngFor directive with trackBy
+=========================================
+import { Component } from '@angular/core';
+@Component({
+  selector: 'app-root',
+  templateUrl: 'app.component.html'
+})
+export class AppComponent {
+   employees = [
+    { "eId": 101, "name": "sanjay", "sal": 5000, "gender": "male" },
+    { "eId": 104, "name": "geeta", "sal": 8000, "gender": "female" },
+    { "eId": 103, "name": "sameer", "sal": 7000, "gender": "male" },
+    { "eId": 102, "name": "sita", "sal": 9000, "gender": "female" },
+    { "eId": 105, "name": "deepak", "sal": 8000, "gender": "male" }
+  ];
+  updateEmployeeData() {
+    this.employees = [
+      { "eId": 101, "name": "sanjay", "sal": 5000, "gender": "male" },
+      { "eId": 104, "name": "geeta", "sal": 8000, "gender": "female" },
+      { "eId": 103, "name": "sameer", "sal": 7000, "gender": "male" },
+      { "eId": 102, "name": "sita", "sal": 9000, "gender": "female" },
+      { "eId": 105, "name": "deepak", "sal": 8500, "gender": "male" }
+    ];
+  }
+}
+************************
+<div class="row">
+        <table class="table table-bordered table-striped">
+            <tbody>
+                @for(employee of employees;track employee.eId){
+                <tr>
+                    <td>{{$index+1}}</td>
+                    <td>{{employee.eId}}</td>
+                    <td>{{employee.name}}</td>
+                    <td>{{employee.gender}}</td>
+                    <td>{{employee.sal}}</td>
+                    <td>{{$first}}</td>
+                    <td>{{$last}}</td>
+                    <td>{{$even}}</td>
+                    <td>{{$odd}}</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+ <button class="btn btn-primary" (click)="updateEmployeeData()">Click Me</button>
+
+
+
+
+
+
+
+Program- Toggle Tasks
+=====================
+ tasks= [
+    { id: 1, title: 'Learn Angular @for', completed: false },
+    { id: 2, title: 'Build Todo App', completed: true },
+    { id: 3, title: 'Practice Components', completed: false }
+  ];
+  filter: 'All' | 'Completed' | 'Pending' = 'All';
+  toggleTask(task) {
+    task.completed = !task.completed;
+  }
+  get filteredTasks() {
+    switch (this.filter) {
+      case 'Completed':
+        return this.tasks.filter(t => t.completed);
+      case 'Pending':
+        return this.tasks.filter(t => !t.completed);
+      default:
+        return this.tasks;
+    }
+  }
+  get pendingCount(): number {
+    return this.tasks.filter(t => !t.completed).length;
+  }
+  get totalCount(): number {
+    return this.tasks.length;
+ }
+ 
+ 
+
+ 
+
+
+
+
+
+
+Program-18 : Pagination
+==========================
+1. Install Pagination Library using the below command
+	npm i ngx-pagination	
+2. Add pagination module 
+	import { NgxPaginationModule } from 'ngx-pagination';
+	imports: [ BrowserModule, NgxPaginationModule]	 
+3. in HTML file add the below line 
+    @for(user of users | paginate: { itemsPerPage: 4, currentPage: p };track $index)
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+
+
+
+Program-19 : star Rating
+========================
+import { faStar as faStarSolid } from '@fortawesome/free-solid-svg-icons';
+import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
+
+getStarType(rating: number, index: number) {
+    const exactrating = rating; // 4.1
+    const fullRating = Math.floor(rating); // 4
+    if (index <= fullRating) {
+      return faStarSolid;
+    } else if (index == fullRating + 1) {
+      return faStarHalf;
+    } else {
+      return faStarRegular;
+    }
+  }
+
+-----------------------------------------
+
+  rating: number = 3;
+  maxStars: number = 5;
+  stars: boolean[] = [];
+  ngOnInit() {
+    this.stars = Array(this.maxStars).fill(false);
+  }
+  rate(stars: number) {
+    this.rating = stars;
+  }
+--------------------------------
+<div class="star-rating">
+    @for( star of stars; let i = $index;track $index){
+        <span (click)="rate(i + 1)" class="star" [class.filled]="i < rating">
+            ★
+        </span>
+    }
+</div>
+--------------------------
+.star {
+    font-size: 2rem;
+    cursor: pointer;
+    color: grey;
+}
+.star.filled {
+    color: gold;
+} 
+
+
+
+
+Program :  tic tac toe
+=======================
+  board: string[][] = [
+    ['', '', ''],
+    ['', '', ''],
+    ['', '', '']
+  ];
+  currentPlayer: string = 'X';
+  winner: string | null = null;
+
+  makeMove(row: number, col: number): void {
+    if (!this.board[row][col] && !this.winner) {
+      this.board[row][col] = this.currentPlayer;
+      if (this.checkWinner()) {
+        this.winner = this.currentPlayer;
+      } else {
+        this.currentPlayer = this.currentPlayer === 'X' ? 'O' : 'X';
+      }
+    }
+  }
+
+  checkWinner(): boolean {
+    const lines = [
+      // Rows
+      ...this.board,
+      // Columns
+      [this.board[0][0], this.board[1][0], this.board[2][0]],
+      [this.board[0][1], this.board[1][1], this.board[2][1]],
+      [this.board[0][2], this.board[1][2], this.board[2][2]],
+      // Diagonals
+      [this.board[0][0], this.board[1][1], this.board[2][2]],
+      [this.board[0][2], this.board[1][1], this.board[2][0]]
+    ];
+
+    return lines.some(line => line.every(cell => cell === this.currentPlayer));
+  }
+  reset(): void {
+    this.board = [
+      ['', '', ''],
+      ['', '', ''],
+      ['', '', '']
+    ];
+    this.currentPlayer = 'X';
+    this.winner = null;
+  }
+-------------------------------
+<div class="board">
+  <div *ngFor="let row of board; let rowIndex = index" class="row">
+    <button *ngFor="let cell of row; let colIndex = index"
+            class="cell"
+            (click)="makeMove(rowIndex, colIndex)">
+      {{ cell }}
+    </button>
+  </div>
+</div>
+<div *ngIf="winner" class="winner">
+  Winner: {{ winner }} 
+</div>
+<button (click)="reset()">Reset Game</button>
+--------------------------------------------
+.board {
+  display: flex;
+  flex-direction: column;
+  width: 180px;
+  margin-bottom: 10px;
+}
+.row {
+  display: flex;
+}
+.cell {
+  width: 60px;
+  height: 60px;
+  font-size: 24px;
+  margin: 2px;
+}
+.winner {
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+
+
+
+  
+Program-20 : Custom Directive
+=============================
+import { Directive, HostBinding, HostListener } from '@angular/core';
+
+@Directive({
+  selector: '[numberonly]'
+})
+export class NumberonlyDirective {
+  @HostBinding('style.background-color')
+  myBgColor: string = '';
+
+  @HostListener('keyup', ['$event.target.value'])
+  handleKeyUp(value: string) {
+    let regex = new RegExp(/^[0-9]*$/);
+	// let regex = new RegExp(/^[a-z]+$/);   // Text Only
+    if (!regex.test(value)) {
+      this.myBgColor = 'red';
+    } else {
+      this.myBgColor = 'cyan';
+    }
+  }
+}
+
+******************
+<input type="text" numberonly name="salary" id="salary">
+
+
+
+
+
+Program : Input sanitizer (prevent Special Characters in inputBox)
+==========================
+export class AlphaNumeric {
+  constructor(private renderer: Renderer2) { }
+  
+  @HostListener('input', ['$event'])
+  onInput(event: any) {
+    let rawValue = event.target.value;
+    let sanitizedValue = rawValue.replace(/[^a-zA-Z0-9 ]/g, '');
+    console.log(sanitizedValue)
+    if (rawValue !== sanitizedValue) {
+      this.renderer.setProperty(event.target, 'value', sanitizedValue)
+    }
+  }
+}
+
+
+Program : Disable Copy/Paste
+=============================
+export class DisableCopyPaste {
+  @HostListener('copy', ['$event'])
+  @HostListener('paste', ['$event'])
+  onCopyOrPaste(event: any) {
+    console.log('event ', event.type)
+    event.preventDefault();
+  }
+}
+
+
+
+
+
+Program-21: Custom Directive - Highlight
+===========================================
+import { Directive, ElementRef, HostListener } from '@angular/core';
+@Directive({
+  selector: '[appHighlight]',
+})
+export class HighlightDirective {
+  constructor(private ele: ElementRef) {
+    console.log(ele);
+  }
+  @HostListener('mouseenter') onMouseEnter() {
+    this.highlight('yellow', 'red');
+  }
+  @HostListener('mouseleave') onMouseLeave() {
+    this.highlight('', '');
+  }
+  private highlight(bgColor: string, color: string) {
+    this.ele.nativeElement.style.backgroundColor = bgColor;
+    this.ele.nativeElement.style.color = color;
+  }
+}
+---------------------------------
+<span appHighlight>this is a paragraph</span>
+
+
+
+
+
+Program-22: Custom Directive - Zoomin
+======================================
+import { Directive, ElementRef, HostListener } from '@angular/core';
+@Directive({
+  selector: '[zoomin]'
+})
+export class ZoominDirective {
+  constructor(private ele: ElementRef) { }
+  @HostListener('mouseenter') onMouseEnter() {
+    this.ele.nativeElement.style.transform = 'scale(100%,120%)'
+  }
+  @HostListener('mouseleave') onMouseLeave() {
+    this.ele.nativeElement.style.transform = 'scale(100%)'
+  }
+}
+
+ 
+
+Program-23: Custom Directive - Back Button
+===========================================
+import { Directive, HostListener } from '@angular/core';
+import { Location } from '@angular/common'
+
+@Directive({
+  selector: '[backButton]'
+})
+export class BackButtonDirective {
+
+  constructor(private location: Location) { }
+
+  @HostListener('click')
+  clickHandler(e) {
+    this.location.back();
+  }
+}
+
+
+
+
+
+Program-24 : Tooltip Directive
+===============================
+import { Directive, ElementRef, HostListener, Input, Renderer2 } from '@angular/core';
+@Directive({
+  selector: '[appTooltip]'
+})
+export class TooltipDirective {
+  @Input()
+  tooltipText!: string;
+  tooltipElement!: HTMLElement;
+
+  constructor(private el: ElementRef, private renderer: Renderer2) {}
+
+  @HostListener('mouseenter') onMouseEnter() {
+    this.tooltipElement = this.renderer.createElement('span');
+    const text = this.renderer.createText(this.tooltipText);
+    this.renderer.appendChild(this.tooltipElement, text);
+    this.renderer.appendChild(this.el.nativeElement, this.tooltipElement);
+    this.renderer.addClass(this.tooltipElement, 'tooltip');
+  }
+
+  @HostListener('mouseleave') onMouseLeave() {
+    this.renderer.removeChild(this.el.nativeElement, this.tooltipElement);
+  }
+}
+
+<button appTooltip="Save your changes">Save</button>
+
+
+
+
+
+Program-25 : How to use Modal
+=============================
+1. npm i bootstrap
+2. Add the below TS code
+  selectedEmployee:any;
+  displayStyle = 'none';
+  openPopup(emp:any) {
+    this.selectedEmployee = emp;
+    this.displayStyle = 'block';
+  }
+  closePopup() {
+    this.displayStyle = 'none';
+  }
+2. Add the below modal code
+
+<button class="btn btn-secondary" (click)="openPopup(emp)">View</button>
+ 
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{ display: displayStyle }">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Employee Details</h4>
+            </div>
+            <div class="modal-body">
+                <p>id: {{ selectedEmployee?.eId }}</p>
+                <p>Name: {{ selectedEmployee?.name }}</p>
+                <p>sal: {{ selectedEmployee?.sal }}</p>
+                <p>sal: {{ selectedEmployee?.sal }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" (click)="closePopup()">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+  
+  
+  
+  
+
+
+
+
+program-26 : async pipe
+========================
+import { Component } from "@angular/core";
+import { Observable,interval } from 'rxjs';
+@Component({
+  selector: 'app-root',
+  templateUrl: 'app.component.html'
+})
+export class AppComponent {
+  createObservable3 = interval(2000);
+  testObservable3 = this.createObservable3.subscribe(val => console.log(val));
+}            
+**********
+<h1>Observable Example</h1>
+<h1>{{createObservable3 | async }}</h1>
+
+
+
+
+
+program-27 : Custom Pipe(Remaining Char)
+========================================
+import { Pipe, PipeTransform } from '@angular/core';
+@Pipe({
+  name: 'count'
+})
+export class CountPipe implements PipeTransform {
+  transform(input){
+    var output = 150 - input.length;
+    return output;
+  }
+}
+
+
+program-28 : Custom Pipe(Age Pipe)
+==================================
+import { Pipe, PipeTransform } from '@angular/core';
+@Pipe({
+  name: 'age',
+})
+export class AgePipe implements PipeTransform {
+  transform(value: Date): any {
+    if(!value) return '';
+    const currentYear = new Date().getFullYear();
+    const dobYear = new Date(value).getFullYear();
+    const age = currentYear - dobYear;
+    return age + ' years old';
+  }
+}
+
+
+
+
+program-29: Custom Pipe(Truncate)
+=================================
+import { Pipe, PipeTransform } from '@angular/core';
+@Pipe({
+  name: 'truncate'
+})
+export class TruncatePipe implements PipeTransform {
+  transform(value: string, limit = 20, completeWords = false, ellipsis = '...') {
+    if (completeWords) {
+      limit = value.substr(0, limit).lastIndexOf(' ');
+    }
+    return value.length > limit ? value.substr(0, limit) + ellipsis : value;
+  }
+}
+  <h1>{{longStr | truncate }}</h1> 
+  <!-- Outputs: A really long string that... -->
+  
+  <h1>{{longStr | truncate : 12 }}</h1> 
+  <!-- Outputs: A really lon... -->
+
+  <h1>{{longStr | truncate : 12 : true }}</h1> 
+  <!-- Outputs: A really... -->
+
+  <h1>{{longStr | truncate : 12 : false : '***' }}</h1> 
+  <!-- Outputs: A really lon*** -->
+
+
+
+
+
+program-30: Custom Pipe(Search)
+=================================
+import { Pipe, PipeTransform } from '@angular/core';
+@Pipe({
+  name: 'search'
+})
+export class SearchPipe implements PipeTransform {
+  transform(items: any[], searchText: string): any[] {
+  	if (!items) return [];
+  	if (!searchText) return items;
+
+  	searchText = searchText.toLowerCase();
+  	return items.filter(item => {
+  		return JSON.stringify(item).toLowerCase().includes(searchText);
+  	});
+  }
+}
+
+
+
+
+program-31: Custom Pipe(Mr. Miss)
+=================================
+import { Pipe, PipeTransform } from '@angular/core';
+@Pipe({
+  name: 'title'
+})
+export class SearchPipe implements PipeTransform {
+  transform(name:any, emp?:any): any {
+  	if(emp.gender == 'male')
+		return "mr. "+name
+	else
+		return "miss. "+name
+  }
+}
+
+
+
+program-32: use pre-defined pipes in component
+===============================================
+import { Component, ViewChild } from '@angular/core';
+import { CurrencyPipe } from '@angular/common';
+
+@Component({
+  selector: 'my-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
+  providers: [CurrencyPipe]
+})
+export class AppComponent {
+  constructor(private currencyPipe: CurrencyPipe) {
+
+  }
+  sal = 5000;
+  formattedSal1 = this.currencyPipe.transform(this.sal);
+  formattedSal2 = this.currencyPipe.transform(this.sal, '$');
+}
+
+
+
+
+Program- Custom Pipe (File Size)
+=================================
+transform(bytes: number): string {
+  if (bytes === 0) return '0 B';
+  const k = 1024;
+  const sizes = ['B', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return (bytes / Math.pow(k, i)).toFixed(2) + ' ' + sizes[i];
+}
+
+
+
+
+program-33: pure pipe vs impure pipe
+====================================
+-A pure pipe is only called when Angular detects a change in the value 
+or the parameters passed to a pipe.(on component load only)
+
+-An impure pipe is called for every change detection cycle
+ no matter whether the value or parameters changes.(on every change)
+ 
+-By Default every pipe is pure pipe
+
+ex:
+@Pipe({
+  name: 'myCustomPipe', 
+  pure: true/false
+})
+
+import { Component } from '@angular/core';
+@Component({
+  selector: 'app-root',
+  template: `
+    <h2>
+    enter a number 
+    <input [(ngModel)]="x" #num /> &nbsp;
+    <button (click)="addNewDigit(num.value)">add</button><hr>
+
+    Original array:
+    <span *ngFor="let digit of originalList">
+      <b>{{digit}}</b>, &nbsp; 
+    </span><hr>
+
+    Pure Pipe: <br>List is being sorted on component load only<br>
+    <span *ngFor="let digit of pureSortableDigits | pureSort">
+      <b>{{digit}}</b>, &nbsp; 
+    </span><hr>
+
+    ImPure Pipe:<br>List is being sorted on every change<br>
+    <span *ngFor="let digit of impureSortableDigits | impureSort">
+      <b>{{digit}}</b>, &nbsp; 
+    </span>
+    </h2>
+  `
+})
+export class AppComponent {
+  newDigit: number
+
+  originalList: number[] = [
+    2, 3, 4, 1
+  ]
+
+  pureSortableDigits: number[] = [
+    2, 3, 4, 1
+  ]
+
+  impureSortableDigits: number[] = [
+    2, 3, 4, 1
+  ]
+
+  addNewDigit(newDigit) {
+    this.originalList.push(newDigit)
+    this.pureSortableDigits.push(newDigit)
+    this.impureSortableDigits.push(newDigit)
+  }
+}
+
+
+
+program-34 : inputs and outputs(component communication)
+========================================================
+import { Component, OnInit } from '@angular/core';
+@Component({
+  selector: 'app-parent',
+  template: `<h3>Parent Component <br>
+    x from its own component is: {{x}} <br>
+    y from its own component is: {{y}} <br>
+
+    a from child is: {{aParent}} <br>
+    b from child is: {{bParent}} <br>
+    
+    <hr>
+  <app-child [xChild]='x' [yChild]='y' 
+  (aEvent)="getA($event)" (bEvent)="getB($event)"></app-child>
+  </h3>`
+})
+export class ParentComponent {
+  x: number = 10;
+  y: number = 20;
+  aParent : number;
+  bParent : string;
+  
+  getA(temp:number){
+      this.aParent = temp;
+  }
+  getB(temp:string){
+    this.bParent = temp;
+  }
+}
+****
+import { Component, EventEmitter } from '@angular/core';
+
+@Component({
+  selector: 'app-child',
+  inputs: ['xChild', 'yChild'],
+  outputs: ['aEvent', 'bEvent'],
+  template: `<h3>Child Component</h3>
+    a from its own component is: {{a}} <br>
+    b from its own component is: {{b}} <br>
+
+  x value from parent is: {{xChild}} <br>
+  y value from parent is: {{yChild}} <br>
+
+  <button (click)='sendA()'>send a data</button>&nbsp;
+  <button (click)='sendB()'>send b data</button>
+ `
+})
+export class ChildComponent {
+  xChild: number;
+  yChild: number;
+
+  a: number = 15;
+  b: string = "hiiiiii";
+
+  aEvent = new EventEmitter<number>();
+  bEvent = new  EventEmitter<string>();
+
+  sendA():void{
+    this.aEvent.emit(this.a);
+  }
+  sendB():void{
+    this.bEvent.emit(this.b);
+  }
+}
+
+
+program-35 : Flipkart Categories
+=================================
+const categoryArr = [
+  { label: "Grocery", img_url: "https://rukminim1.flixcart.com/fk-p-flap/196/196/image/8b4adaace948fe23.jpg?q=60" },
+  { label: "Mobile", img_url: "https://rukminim1.flixcart.com/fk-p-flap/196/196/image/a6189afdd765a687.jpg?q=60" },
+  { label: "Appliances", img_url: "https://rukminim1.flixcart.com/fk-p-flap/196/196/image/51b0d5f9aabc2462.jpg?q=60" },
+  { label: "Beauty", img_url: "https://rukminim1.flixcart.com/fk-p-flap/196/196/image/d31d524f681630af.jpg?q=60" },
+  { label: "Furniture", img_url: "https://rukminim1.flixcart.com/fk-p-flap/196/196/image/9be859f78d39cc22.jpg?q=60" },
+  { label: "Fashion", img_url: "https://rukminim1.flixcart.com/fk-p-flap/196/196/image/5dca7713b355df43.jpg?q=60" },
+  { label: "Travel", img_url: "https://rukminim1.flixcart.com/fk-p-flap/196/196/image/d7eae409dc461a54.jpg?q=60" },
+  { label: "Electronics", img_url: "https://rukminim1.flixcart.com/fk-p-flap/196/196/image/a080ac3397f3612d.png?q=60" },
+  { label: "Supercoin", img_url: "https://rukminim1.flixcart.com/fk-p-flap/196/196/image/e476bbcf4677c695.jpg?q=60" }
+];
+allCategories = [
+    { label: 'Grocery', img_url: 'https://rukminim2.flixcart.com/flap/72/72/image/29327f40e9c4d26b.png?q=100' },
+    { label: 'Mobile', img_url: 'https://rukminim2.flixcart.com/flap/72/72/image/22fddf3c7da4c4f4.png?q=100' },
+    { label: 'Fashion', img_url: 'https://rukminim2.flixcart.com/fk-p-flap/72/72/image/0d75b34f7d8fbcb3.png?q=100' },
+    { label: 'Electronics', img_url: 'https://rukminim2.flixcart.com/flap/72/72/image/69c6589653afdb9a.png?q=100' },
+    { label: 'Furniture', img_url: 'https://rukminim2.flixcart.com/flap/72/72/image/ab7e2b022a4587dd.jpg?q=100' },
+    { label: 'Appliances', img_url: 'https://rukminim2.flixcart.com/fk-p-flap/72/72/image/0139228b2f7eb413.jpg?q=100' },
+    { label: 'Travel', img_url: 'https://rukminim2.flixcart.com/flap/72/72/image/71050627a56b4693.png?q=100' },
+    { label: 'Beauty & Toys', img_url: 'https://rukminim2.flixcart.com/flap/72/72/image/dff3f7adcf3a90c6.png?q=100' },
+    { label: 'Two Wheeler', img_url: 'https://rukminim2.flixcart.com/fk-p-flap/72/72/image/05d708653beff580.png?q=100' },
+  ]
+  
+<div class="container">
+    <div class="row">
+        @for(categoryObj of allCategories;track $index){
+           <div class="col">
+                <app-category [categoryObj]="categoryObj"></app-category>
+           </div>
+        }
+    </div>
+</div>
+
+<div class="category text-center">
+    <img src={{categoryObj.img_url}} alt="">
+    <div>{{categoryObj.label}}</div>
+</div>
+
+.category img{
+    width:65px;
+    height:65px;
+}
+.category div{
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+
+
+program-36 : life cycle hooks all methods
+==========================================
+import { Component } from "@angular/core";
+@Component({
+  selector: 'app-root',
+  templateUrl: 'app.component.html',
+  styleUrls: ['app.component.css']
+})
+export class AppComponent {
+  num = 0;
+
+  constructor() {
+    console.log("Parent constructor")
+  }
+  ngOnInit() {
+    console.log('Parent ngOnInit');
+  }
+  ngOnChanges() {
+    console.log('Parent ngOnChanges');
+  }
+  ngDoCheck() {
+    console.log('Parent ngDoCheck');
+  }
+  ngAfterContentInit() {
+    console.log('Parent ngAfterContentInit');
+  }
+  ngAfterContentChecked() {
+    console.log('Parent ngAfterContentChecked')
+  }
+  ngAfterViewInit() {
+    console.log('Parent ngAfterViewInit');
+  }
+  ngAfterViewChecked() {
+    console.log('Parent ngAfterViewChecked');
+  }
+  ngOnDestroy() {
+    console.log('Parent ngOnDestory');
+  }
+  increment() {
+    this.num++;
+  }
+}
+------
+<h1>
+    this is app component <br>
+    Parent Component num: {{num}} <br>
+    <button (click)="increment()">Increment(+)</button> <br>
+    <hr>
+    <app-my-child [childNum]='num'></app-my-child>
+</h1>
+---------
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'my-child',
+  templateUrl: './mychild.component.html',
+  styleUrls: ['./mychild.component.css'],
+  inputs: ['childNum']
+})
+export class MychildComponent implements OnInit {
+  constructor() {
+    console.log('child constructor');
+  }
+  ngOnInit() {
+    console.log('child ngOnInit');
+  }
+  ngOnChanges() {
+    console.log('child ngOnChanges');
+  }
+  ngDoCheck() {
+    console.log('child ngDoCheck');
+  }
+  ngAfterContentInit() {
+    console.log('child ngAfterContentInit');
+  }
+  ngAfterContentChecked() {
+    console.log('child ngAfterContentChecked')
+  }
+  ngAfterViewInit() {
+    console.log('child ngAfterViewInit');
+  }
+  ngAfterViewChecked() {
+    console.log('child ngAfterViewChecked');
+  }
+  ngOnDestroy() {
+    console.log('child ngOnDestory');
+  }
+
+}
+--------
+<p>
+  This is child component <br>
+  child component Num: {{childNum}}
+</p>
+
+
+
+program-37 :  ngDOCheck()
+============================
+import { Component, OnInit, OnChanges, ChangeDetectionStrategy, DoCheck, 
+  ChangeDetectorRef } from '@angular/core';
+
+@Component({
+  selector: 'app-child',
+  templateUrl: './child.component.html',
+  styleUrls: ['./child.component.css'],
+  inputs: ['xChild'],
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class ChildComponent implements OnChanges, OnInit, DoCheck {
+  constructor(private changeDetectorObj: ChangeDetectorRef) {
+  }
+  ngOnChanges(myChanges) {
+    console.log('onchanges called', myChanges)
+  }
+  ngOnInit() {
+    console.log('oninit called')
+  }
+  ngDoCheck() {
+    this.changeDetectorObj.markForCheck();
+  }
+}
+
+
+program-38 - ngDoCheck
+======================
+import { Component, DoCheck, KeyValueDiffers, KeyValueDiffer } from '@angular/core';
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+})
+export class AppComponent implements DoCheck {
+  user = { name: 'John Doe' };
+  private userDiffer: KeyValueDiffer<string, any>;
+  changes: string[] = [];
+
+  changeUserData(newName: string) {
+    this.user.name = newName;
+  }
+  constructor(private keyValueDiffers: KeyValueDiffers) {
+    this.userDiffer = this.keyValueDiffers.find(this.user).create();
+  }
+  ngDoCheck() {
+    const userChanges = this.userDiffer.diff(this.user);
+    if (userChanges) {
+      userChanges.forEachChangedItem(item => {
+        this.changes.push(`Property ${item.key} changed from ${item.previousValue} to ${item.currentValue}`);
+      });
+    }
+  }
+ 
+-------------------
+<div>
+  <h2>Change Object Property</h2>
+  <input [(ngModel)]="user.name" placeholder="Enter user name">
+  <button (click)="changeUserData()">Change User Name Programmatically</button>
+</div>
+<div>
+  <h3>Current User Details:</h3>
+  <p>Name: {{ user.name }}</p>
+</div>
+<div>
+  <h3>Changes Detected:</h3>
+  <p *ngFor="let change of changes">{{ change }}</p>
+</div>
+
+
+
+
+
+program-39 : @ViewChild and ngAfterViewInit lifecycle hooks
+===========================================================
+import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent implements AfterViewInit {
+  @ViewChild('myInputBox') inputBox;
+
+  constructor() {
+    console.log(this.inputBox); //not yet available
+  }
+  ngAfterViewInit() {
+    this.inputBox.nativeElement.focus();    
+    console.log(this.inputBox)
+  }
+}
+*************
+<h1>@ViewChild to inject a reference to a DOM element</h1>
+<input type="text" #myInputBox>
+
+
+
+Program-40 : @viewChild to access child members in parent component
+===================================================================
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { ChildComponent } from './child/child.component'
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent implements AfterViewInit {
+  @ViewChild(ChildComponent) childRef;
+
+  constructor() {
+    console.log("inside constructor")
+    // console.log(this.childRef.a); //not yet available
+    // console.log(this.childRef.b); //not yet available
+  }
+  ngAfterViewInit() {
+    console.log("inside ngAfterViewInit")
+    console.log(this.childRef.a);
+    console.log(this.childRef.b);
+  }
+
+}
+
+
+
+Program-41  :   @viewChildren
+===============================
+@ViewChildren('myInputBox') allinputBoxes: any;
+
+ngAfterViewInit() {
+    console.log(this.allinputBoxes);
+    this.allinputBoxes._results?.forEach((ele: any) => {
+      ele.nativeElement.style.backgroundColor = 'green';
+    });
+  }
+
+
+
+Program-42  :   renderer
+==========================
+import { Component, ElementRef, Renderer2, AfterViewInit } from '@angular/core';
+@Component({
+  selector: 'app-example',
+  template: `<div #myDiv>Content here</div>`,
+})
+export class ExampleComponent implements AfterViewInit {
+  constructor(private renderer: Renderer2, private el: ElementRef) {}
+  ngAfterViewInit(): void {
+    const div = this.el.nativeElement.querySelector('div');
+
+    // Add a CSS class
+    this.renderer.addClass(div, 'highlight');
+
+    // Set a style property
+    this.renderer.setStyle(div, 'color', 'blue');
+
+    // Add an attribute
+    this.renderer.setAttribute(div, 'role', 'button');
+
+    // Listen to an event
+    this.renderer.listen(div, 'click', () => {
+      console.log('Div clicked!');
+    });
+  }
+}
+
+
+
+
+Program-43 : ViewContainerRef.createComponent()
+=============================================
+<!-- app.component.html -->
+<div>
+  <h1>Dynamic Component Example</h1>
+  <button (click)="loadDynamicComponent()">Load Dynamic Component</button>
+  <ng-container #dynamicContainer></ng-container>
+</div>
+
+// app.component.ts
+import { Component, ViewChild, ViewContainerRef } from '@angular/core';
+import { DynamicComponent } from './dynamic.component';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+})
+export class AppComponent {
+  @ViewChild('dynamicContainer', { read: ViewContainerRef, static: true }) container!: ViewContainerRef;
+
+  loadDynamicComponent() {
+    // Clear any previously inserted components
+    this.container.clear();
+
+    // Dynamically create and insert the component
+    this.container.createComponent(DynamicComponent);
+  }
+}
+
+
+
+
+Program @ContentChild and ngAfterContentInit
+============================================= 
+  @ContentChild('myTitle') myTitle: any; (#myTitle is in parent HTML)
+  @ViewChild('myBox') myBox: any;
+  constructor() {
+    console.log('MyModal constructor');
+    console.log(this.myTitle);
+    console.log(this.myBox);
+  }
+  ngAfterContentInit() {
+    console.log('MyModal ngAfterContentInit');
+    console.log(this.myTitle);
+    this.myTitle.nativeElement.style.color = 'red';
+  }
+  ngAfterViewInit() {
+    console.log('MyModal ngAfterViewInit');
+    console.log(this.myBox);
+    this.myBox.nativeElement.style.color = 'blue';
+  }
+
+
+
+
+
+program-44: create a math Services
+======================================
+import { Injectable } from '@angular/core';
+@Injectable()
+export class MathService {
+  sum(values: number[]): number {
+    return values.reduce((total, ele) => total + ele, 0);
+  }
+  average(values: number[]): number {
+    return values.length ? this.sum(values) / values.length : 0;
+  }
+  indexOfMax(values: number[]): number {
+    const max = Math.max(...values)
+    return values.indexOf(max);
+  }
+  
+}
+
+
+
+
+
+
+ObjectUtilService
+=================
+import { Injectable } from '@angular/core';
+@Injectable({
+  providedIn: 'root'
+})
+export class ObjectUtilService {
+  // Check if object is empty 
+  isEmpty(obj: any): boolean {
+    return (
+      obj !== null &&
+      typeof obj === 'object' &&
+      !Array.isArray(obj) &&
+      Object.keys(obj).length === 0
+    );
+  }
+
+  //  Deep comparison 
+  deepEqual(a: any, b: any): boolean {
+    if (a === b) return true;
+    if (typeof a !== typeof b) return false;
+    if (typeof a === 'object' && a !== null && b !== null) {
+      const keysA = Object.keys(a);
+      const keysB = Object.keys(b);
+      if (keysA.length !== keysB.length) return false;
+      return keysA.every(key =>
+        this.deepEqual(a[key], b[key])
+      );
+    }
+    return false;
+  }
+  // Remove null, undefined and empty string properties 
+  removeEmptyProps(obj: any): any {
+    const result: any = {};
+    Object.keys(obj || {}).forEach(key => {
+      const value = obj[key];
+      if (value !== null && value !== undefined && value !== '') {
+        result[key] = value;
+      }
+    });
+    return result;
+  }
+  // Pick selected properties from object 
+  pick(obj: any, keys: string[]): any {
+    const result: any = {};
+    keys.forEach(key => {
+      if (obj && key in obj) {
+        result[key] = obj[key];
+      }
+    });
+    return result;
+  }
+}
+
+
+
+
+
+program-45: httpClient example
+================================
+import { Component } from "@angular/core";
+import { HttpClient } from '@angular/common/http';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: 'app.component.html',
+  styleUrls: ['app.component.css']
+})
+export class AppComponent {
+result;
+  constructor(obj: HttpClient) {
+    obj.get('https://jsonplaceholder.typicode.com/comments')
+    .subscribe((response) => {
+      console.log(response);
+      this.result = response;
+    });
+  }
+}
+
+
+
+
+program-46 :  HttpClient with Headers
+=======================================
+Reading the full response(not only the body)
+
+this.http.get('https://jsonplaceholder.typicode.com/posts',
+	{ observe: 'response' }).subscribe(
+      (res)=>{
+        console.log(res)
+      }
+    )
+
+
+
+
+program-47: httpClientt (Todo Service)
+======================================
+todo.ts
+-------
+export interface Todo {
+    userId: number;
+    id: number;
+    title: string;
+    completed: boolean;
+}
+todo.service.ts
+---------------
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Todo } from './todo'
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class TodoService {
+  constructor(public httpObj: HttpClient) {
+  }
+  getAllTodos(): Observable<Todo[]> {
+    return this.httpObj.get<Todo[]>('https://jsonplaceholder.typicode.com/todos')
+  }
+}
+app.component.ts
+-----------------
+import { Component } from "@angular/core";
+import { Todo } from './todo';
+import { TodoService } from './todo.service'
+
+@Component({
+  selector: 'app-root',
+  templateUrl: 'app.component.html',
+  styleUrls: ['app.component.css']
+})
+export class AppComponent {
+  todos: Todo[];
+  constructor(public todoServiceObj: TodoService) {
+  }
+  ngOnInit() {
+    this.todoServiceObj.getAllTodos()
+      .subscribe((response: Todo[]) => {
+        this.todos = response;
+      });
+  }
+}
+
+
+
+
+
+program-48 : Http with Model & Observable
+==========================================
+export class Comment {
+  constructor(
+    public id: number,
+    public postId: number,
+    public name: string,
+    public email: string,
+	public body: string
+  ) {}
+}
+*********
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Comment } from './comment';
+import { Observable } from 'rxjs';
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class CommentService {
+  private url = 'https://jsonplaceholder.typicode.com/comments';
+  constructor(private http: HttpClient) {
+  }
+  getAllComments(): Observable<Comment[]> {
+    return this.httpClient.get<Comment[]>(this.url, { observe: "body" }).pipe(
+      map((res: Comment[]) => {
+        return res.map((item: Comment) => {
+          return new Comment(item.id,item.postId,item.name,item.email,item.body);
+        });
+      })
+    );
+  }
+}
+*************
+import { Component } from "@angular/core";
+import { Comment } from './comment';
+import { CommentService } from './comment.service'
+
+@Component({
+  selector: 'app-root',
+  templateUrl: 'app.component.html'
+})
+export class AppComponent {
+  commentList: Comment[];
+
+  constructor(public ob: CommentService) {
+    this.ob.getAllComments().subscribe((response: Comment[]) => {
+      this.commentList = response;
+      console.log(this.commentList);
+    });
+  }
+}   
+
+
+
+Program-49 : Model Class
+==========================
+export class Employee {
+  id: number;
+  firstName: string;
+  lastName: string;
+  sal: number;
+  gender: string;
+  constructor(data: any) {
+    Object.assign(this, data);
+  }
+  getFullName(): string {
+    return `${this.firstName} ${this.lastName}`;
+  }
+  getYearlySalary(): number {
+    return 12 * this.sal;
+  }
+}
+
+
+getAllEmployees(): Observable<Employee[]> {
+    return this.httpClient.get<Employee[]>('http://localhost:3000/employees').pipe(
+      map((responseArr: Employee[]) => {
+        return responseArr.map((responseObj: Employee) => new Employee(responseObj));
+      })
+    );
+ }	
+  
+  
+
+	
+Program-50 : HTTP Interceptor Example
+=======================================
+import { HttpInterceptorFn } from '@angular/common/http';
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  // const myToken = sessionStorage.getItem('myToken');
+  const myToken = 'ABCDEF123456'
+  const requestWithToken = req.clone({
+    setHeaders: {
+      Authorization: `Bearer ${myToken}`
+    }
+  });
+  return next(requestWithToken);
+};
+
+
+
+
+
+
+Program-51 : Retry Interceptor
+===============================
+import { HttpInterceptorFn } from '@angular/common/http';
+import { retry } from 'rxjs';
+export const retryInterceptor: HttpInterceptorFn = (req, next) => {
+  return next(req).pipe(retry(1));
+};
+
+
+
+
+Program-52 : Loading Interceptor
+================================
+import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { finalize } from 'rxjs';
+import { loaderService } from '../services/loader.service';
+export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
+  const loaderService = inject(loaderService);
+  loaderService.show();
+  
+  return next(req).pipe(
+     finalize(() => loaderService.hide()),
+  );
+}
+
+
+LoadingService
+------------------
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+@Injectable({
+  providedIn: 'root'
+})
+export class LoadingService {
+  private loadingSubject = new BehaviorSubject<boolean>(false);
+  loading$ = this.loadingSubject.asObservable();
+  show() {
+    this.loadingSubject.next(true);
+  }
+  hide() {
+    this.loadingSubject.next(false);
+  }
+}
+
+
+
+
+program-54 : Error Interceptor
+==============================
+import { HttpInterceptorFn } from '@angular/common/http';
+import { catchError, EMPTY } from 'rxjs';
+import Snackbar from 'awesome-snackbar';
+
+export const errorInterceptor: HttpInterceptorFn = (req, next) => {
+  return next(req).pipe(catchError((error) => {
+    new Snackbar(`${error.message}`,
+      { position: 'top-center', theme: 'light', timeout: 5000, actionText: 'X' }
+    );
+    return EMPTY;
+  }));
+};
+
+
+
+
+
+
+
+Program-55: Observables
+=========================
+import { Component } from "@angular/core";
+import { Observable, from, interval, range } from 'rxjs';
+import { take, filter, map } from 'rxjs/operators';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: 'app.component.html'
+})
+export class AppComponent {
+  //Create an observable with given subscription function
+  createObservable1 = new Observable(function (observer) {
+    observer.next("aaaaaa");
+    observer.next("bbbbbb");
+    observer.next("cccccc");
+  });
+  subscriber1 = this.producer1.subscribe({
+    next: (v) => console.log(v),
+    error: (e) => console.error(e),
+    complete: () => console.info('completed'),
+  });
+  
+  //Turn an array or iterable into an observable
+  arr = [10, 20, 30, 40, 50];
+  createObservable2 = from(this.arr);
+  testObservable2 = this.createObservable2.subscribe((ele) => {
+    console.log(ele)  })
+
+  // createObservable3 = interval(2000);
+  //testObservable3 = this.createObservable3.subscribe(val => console.log(val));
+
+  createObservable4 = interval(2000);
+  createObservable4_take = this.createObservable4.pipe(take(5));
+  testObservable4 = this.createObservable4_take.subscribe(val => console.log(val));
+
+  createObservable5 = range(1, 10)
+  testObservable5 = this.createObservable5.subscribe(val => console.log(val));
+
+  createObservable6 = range(1, 20);
+  even_numbers = this.createObservable6.pipe(
+    filter((ele) => ele % 2 == 0)
+  )
+  testObservable6 = this.even_numbers.subscribe((ele) => {
+    console.log("even number " + ele)
+  })
+
+  arr2 = [10, 11, 12, 13, 14, 15];
+  createObservable7 = from(this.arr2);
+  createObservableSquare = this.createObservable7.pipe(
+    map((ele) => ele * ele)
+  )
+  testObservableSquare = this.createObservableSquare.subscribe(
+    (ele)=>console.log(ele)
+  )
+  
+  time = new Observable<string>(observer => {
+    setInterval(() => observer.next(new Date().toString()), 1000);
+  });
+
+}  
+
+
+
+
+Program-56 : Zip()
+====================
+zipDemo() {
+    let publisher1 = of(32, 31, 34);
+    let publisher2 = of('sanjay', 'sameer', 'bishnu');
+    let publisher3 = of('bang', 'chennai', 'hyderabad');
+    let finalPublisher = zip(publisher1, publisher2, publisher3).pipe(
+      map(([age, name, add]) => ({ age, name, add }))
+    );
+
+    finalPublisher.subscribe((data) => console.log(data));
+  }
+
+
+
+
+program-57 : forkjoin()
+========================
+fetchDataFromMultipleAPIs() {
+    let userNames = ['sanjaysamantra1', 'ushamahesh818', 'seun035','vamshi5454'];
+    let requests = userNames.map(userName => {
+      return this.httpClient.get(`https://api.github.com/users/${userName}`)
+    });
+    forkJoin(requests).subscribe((responses) => {
+      console.log(responses);
+    });
+}
+
+
+
+Program-58 :  MergeMap()
+========================
+// without mergeMap()
+  usersPublisher = of(1, 2, 3, 4);
+  usersSubscriber = this.usersPublisher.subscribe((user) => {
+    console.log(user);
+    const url = `https://jsonplaceholder.typicode.com/users/${user}`;
+    this.httpClient.get(url).subscribe((userData) => {
+      console.log(userData);
+    });
+  });
+
+  //with mergeMap()
+  let userPublisher = of(1, 2, 3, 4, 5);
+    userPublisher.pipe(mergeMap(userId => {
+      return this.httpClient.get(`https://fakestoreapi.com/carts/${userId}`)
+    })).subscribe(cartResponse => {
+      console.log(cartResponse)
+    });
+                   
+
+
+
+Program-59 : ConcatMap()
+===========================
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { fromEvent, Observable } from 'rxjs';
+import { concatMap } from 'rxjs/operators';
+
+@Component({
+  selector: 'app-test',
+  templateUrl: './test.component.html',
+  styleUrls: ['./test.component.css']
+})
+export class TestComponent implements AfterViewInit {
+  
+@ViewChild('btn1', { static: true }) button: any;
+  clickObservable: Observable<any>;
+  count: number = 0;
+
+  constructor() {
+    this.clickObservable = new Observable();
+  }
+
+
+  ngAfterViewInit() {
+    this.clickObservable = fromEvent(this.button.nativeElement, 'click');
+    this.mergeMapExample();
+  }
+
+  innerObservable(count: number) {
+    return new Observable((observer) => {
+      setTimeout(() => { observer.next(count + " A") }, 1000);
+      setTimeout(() => { observer.next(count + " B") }, 2000);
+      setTimeout(() => { observer.next(count + " C") }, 3000);
+      setTimeout(() => { observer.next(count + " D") }, 4000);
+      setTimeout(() => { observer.next(count + " E"); observer.complete() }, 5000);
+    })
+  }
+
+  mergeMapExample() {
+    let obs =
+      this.clickObservable
+        .pipe(
+          concatMap(() => {
+            this.count = this.count + 1;
+            return this.innerObservable(this.count)
+          })
+        )
+        .subscribe(val => console.log(val));
+  }
+
+}
+
+
+
+program-60 :  TypeAhead using SwitchMap
+========================================
+import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Observable, switchMap, map } from 'rxjs';
+
+@Component({
+  selector: 'app-observable-demo3',
+  standalone: true,
+  imports: [ReactiveFormsModule, CommonModule],
+  templateUrl: './observable-demo3.component.html',
+  styleUrl: './observable-demo3.component.css'
+})
+export class ObservableDemo3Component {
+  searchResult$: Observable<any> | undefined;
+  searchForm: any;
+  constructor(private http: HttpClient) {
+    this.searchForm = new FormGroup({
+      searchField: new FormControl()
+    });
+  }
+  ngOnInit() {
+    this.searchResult$ = this.searchForm.get("searchField").valueChanges.pipe(
+      switchMap((term) =>
+		this.http.get<any>(`https://dummyjson.com/users/search?q=${term}`)
+      ),
+      map((response: any) =>
+		 response.users.length > 0 ? response.users : []
+    ));
+  }
+}
+
+
+--------------------------------
+<div class="border border-2 rounded-2 p-2">
+    <h1>Search Something</h1>
+    <form [formGroup]="searchForm">
+        <input formControlName="searchField" />
+    </form>
+    <table class="table bordered">
+        <tbody>
+            @for(user of searchResult$ | async ; track $index;){
+                <tr>
+                    <td>{{user.username}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.phone}}</td>
+                    <td>{{user.gender}}</td>
+                    <td>{{user.height}}</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+  
+  
+switchmap with other pipes
+================================
+// user-search.component.ts
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { UserService } from './user.service';
+
+@Component({
+  selector: 'app-user-search',
+  templateUrl: './user-search.component.html',
+})
+export class UserSearchComponent implements OnInit, OnDestroy {
+  searchControl = new FormControl('');
+  users: any[] = [];
+  private destroy$ = new Subject<void>();
+
+  constructor(private userService: UserService) {}
+
+  ngOnInit() {
+    this.searchControl.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        switchMap(query => this.userService.searchUsers(query)),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(results => {
+        this.users = results;
+      });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+}
+  
+  
+  
+
+program-61 : exhaustMap Example
+===============================
+@ViewChild('loginBtn') loginBtn!: ElementRef;
+
+ngAfterViewInit() {
+    fromEvent(this.loginBtn.nativeElement, 'click').pipe(exhaustMap((val) => {
+      return this.http.get('https://httpbin.org/delay/5')
+    })).subscribe({
+      next: (res) => console.log('Response:', res),
+      error: (err) => console.error('Error:', err),
+    })
+}
+  
+  
+  
+  
+program-62 :  distinctUntilChanged Example
+============================================
+ distinctUntilChangedDemo() {
+    let userIds = of(1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3);
+    userIds.pipe(distinctUntilChanged()).subscribe((res) => {
+      console.log(res);
+    })
+  }
+  
+ distinctUntilChangedWithComparator() {
+    let user1 = { name: 'sanjay' }
+    let user2 = { name: 'sanjay' }
+    let user3 = { name: 'akash' }
+    let user4 = { name: 'deepak' }
+    let user5 = { name: 'deepak' }
+    let users = from([user1, user2, user3, user4, user5]);
+
+    users.pipe(distinctUntilChanged((prev, curr) => prev.name == curr.name))
+      .subscribe(val => console.log(val));
+  }
+  
+  
+  
+  
+
+
+Program-63 : RXJS-Subject Example
+===================================
+import { Injectable } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
+
+@Injectable({ providedIn: 'root' })
+
+export class MessageService {
+  private subject = new Subject<any>();
+
+  sendMessage(message: string) {
+    this.subject.next({ text: message });
+  }
+
+  clearMessages() {
+    this.subject.next(null);
+  }
+
+  getMessage(): Observable<any> {
+    return this.subject.asObservable();
+  }
+}
+--------
+import { Component, OnInit } from '@angular/core';
+import { MessageService } from '../message.service';
+import { Subscription } from 'rxjs';
+
+@Component({
+  selector: 'app-rxjs',
+  templateUrl: './rxjs.component.html',
+  styleUrls: ['./rxjs.component.css']
+})
+export class RxjsComponent implements OnInit {
+  messages: any[] = [];
+  subscription: Subscription;
+
+  constructor(private messageService: MessageService) {
+	this.subscription = new Subscription();
+  }
+  ngOnInit() {
+    // subscribe to messages subject-observable
+    this.subscription = this.messageService.getMessage().subscribe(message => {
+      if (message) {
+        this.messages.push(message);
+      } else {
+        // clear messages when empty message received
+        this.messages = [];
+      }
+    });
+  }
+  ngOnDestroy() {
+    // unsubscribe to ensure no memory leaks
+    this.subscription.unsubscribe();
+  }
+}
+---------
+<p>rxjs works!</p>
+<table border=2 width=50% align=center>
+  @for (msg of messages; track msg) {
+    <tr>
+      <td>{{msg.text}}</td>
+    </tr>
+  }
+</table>
+--------------
+import { Component, OnInit } from '@angular/core';
+import { MessageService } from '../message.service';
+
+@Component({
+  selector: 'app-rxjs2',
+  templateUrl: './rxjs2.component.html',
+  styleUrls: ['./rxjs2.component.css']
+})
+export class Rxjs2Component implements OnInit {
+  newMsg
+
+  constructor(private messageService: MessageService) { }
+  ngOnInit() { }
+
+  sendMessage(): void {
+    // send message to subscribers via observable subject
+    this.messageService.sendMessage(this.newMsg);
+  }
+
+  clearMessages(): void {
+    // clear messages
+    this.messageService.clearMessages();
+  }
+
+}
+----------
+<p>rxjs2 works!</p>
+<input type="text" [(ngModel)]='newMsg'>
+<button (click)='sendMessage()'>send message</button>
+<button (click)='clearMessages()'>Clear Message</button>
+
+
+
+
+Program-64 : RXJS Behaviour-Subject Example
+============================================
+todo.service.ts
+---------------
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+export interface Todo {
+  id: any;
+  value: string;
+}
+const initialTodos = [
+  { id: 1, value: 'Complete Angular Assignment' },
+  { id: 2, value: 'Learn Java Stream API' },
+];
+@Injectable({
+  providedIn: 'root',
+})
+export class TodoService {
+  private todoSubject = new BehaviorSubject<Todo[]>(initialTodos); // writeable
+  readonly todoObs = this.todoSubject.asObservable(); // readonly, only subscribe
+  private todoArr: Todo[] = this.todoSubject.value;
+  private nextId = 3;
+  addNewTodo(item: any) {
+    item.id = this.nextId++;
+    this.todoArr.push(item);
+    this.todoSubject.next([...this.todoArr]);
+  }
+  deleteToDo(id: number) {
+    this.todoArr.forEach((todo, ind) => {
+      if (todo.id === id) {
+        this.todoArr.splice(ind, 1);
+      }
+      this.todoSubject.next([...this.todoArr]);
+    });
+  }
+}
+
+todo-add.component.ts
+---------------------
+import { Component, OnInit } from '@angular/core';
+import { TodoService } from '../todo.service';
+
+@Component({
+  selector: 'app-todo-add',
+  template: `
+    <div>
+      <h3>Add Todo</h3>
+      <input #addToDo /> &nbsp;
+      <button (click)="addNewTodo(addToDo)">Add New Todo</button>
+    </div>
+  `,
+})
+export class TodoAddComponent implements OnInit {
+  constructor(private todoService: TodoService) {}
+  ngOnInit(): void {}
+  addNewTodo(todoText: string) {
+    this.todoService.addNewTodo({ id: 3, value: todoText });
+  }
+}
+
+
+
+
+
+todo-list.component.ts
+----------------------
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Todo, TodoService } from '../todo.service';
+
+@Component({
+  selector: 'app-todo-list',
+  template: `
+    <h3>Todo List</h3>
+    <div *ngFor="let todo of todos$ | async">
+      {{ todo.id }} {{ todo.value }}
+      <button (click)="deleteTodo(todo.id)">x</button>
+    </div>
+  `,
+})
+export class TodoListComponent implements OnInit {
+  todos$!: Observable<any>;
+  constructor(private todoService: TodoService) {}
+  ngOnInit(): void {
+    this.todos$ = this.todoService.todoObs;
+  }
+  deleteTodo(id: number) {
+    this.todoService.deleteToDo(id);
+  }
+}
+
+
+
+
+
+Program-65 : RXJS Behaviour-Subject Cart Details
+=================================================
+cart-service.ts
+---------------
+export class CartService {
+  private cartItemSubject = new BehaviorSubject([]);
+  cartItem$ = this.cartItemSubject.asObservable();
+  private totalPriceSubject = new BehaviorSubject(0);
+  totalPrice$ = this.totalPriceSubject.asObservable();
+
+  addItem(newItem: any) {
+    const cartItems: any = this.cartItemSubject.value;
+    cartItems.push(newItem);
+    this.cartItemSubject.next(cartItems);
+    this.calculateTotalPrice();
+  }
+  removeItem(itemToRemove: any) {
+    const cartItems: any = this.cartItemSubject.value;
+    const cartItemsAfterRemove = cartItems.filter((cartItem: any) => {
+      return cartItem.id !== itemToRemove.id;
+    });
+    this.cartItemSubject.next(cartItemsAfterRemove);
+    this.calculateTotalPrice();
+  }
+  calculateTotalPrice() {
+    const cartItems: any = this.cartItemSubject.value;
+    let totalPrice = 0;
+    cartItems.forEach((cartItem: any) => {
+      totalPrice = totalPrice + cartItem.price;
+    });
+    this.totalPriceSubject.next(totalPrice);
+  }
+}
+
+
+header.component.ts
+-------------------
+export class HeaderComponent {
+  cartItems: any[] = [];
+  totalPrice: number = 0;
+  subscriptionsArr: Subscription[] = [];
+  constructor(private CartService: CartService) {
+    let cartItemSubscription = this.CartService.cartItem$.subscribe(cartItems => {
+      this.cartItems = cartItems;
+    });
+    this.subscriptionsArr.push(cartItemSubscription);
+
+    let totalPriceSubscription = this.CartService.totalPrice$.subscribe(totalPrice => {
+      this.totalPrice = totalPrice;
+    });
+    this.subscriptionsArr.push(totalPriceSubscription);
+  }
+
+  ngOnDestroy() {
+    this.subscriptionsArr.forEach(subscription => {
+      subscription.unsubscribe();
+    })
+  }
+}
+
+
+
+
+Program : Signal
+================
+  cookieCount: WritableSignal<number> = signal(10);
+  butter = computed(() => this.cookieCount() * 0.1);
+  sugar = computed(() => this.cookieCount() * 0.05);
+  flour = computed(() => this.cookieCount() * 0.2);
+  updateCookieCount(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.cookieCount.set(parseInt(input.value));
+  }
+--------------
+	<h2>Cookie recipe</h2>
+    <label>
+      # of cookies:
+      <input type="range" min="10" max="100" step="10" [value]="cookieCount()" (input)="updateCookieCount($event)" />
+      {{ cookieCount() }}
+    </label>
+    <p>Butter: {{ butter() }} cup(s)</p>
+    <p>Sugar: {{ sugar() }} cup(s)</p>
+    <p>Flour: {{ flour() }} cup(s)</p>
+
+
+
+
+
+Program-66 : Signal 
+====================
+export class SignalDemoComponent {
+  num: WritableSignal<number> = signal(0);
+  messages: WritableSignal<string[]> = signal([]);
+  numDouble: Signal<number> = computed(() => this.num() * 2);
+  numSquare: Signal<number> = computed(() => this.num() * this.num());
+
+  increment() {
+    this.num.update((value: number) => value + 1)
+    this.messages.set([...this.messages(), `Value of Num is: ${this.num()}`]);
+  }
+  decrement() {
+    this.num.update((val: number) => val - 1);
+    this.messages().pop()
+    this.messages.set([... this.messages()]);
+  }
+  reset() {
+    this.num.set(0);
+    this.messages.set([]);
+  }
+}
+-----------------------
+<h3 class="text-center">Counter Example using Signal</h3>
+<div class="border">
+    <h4>Num value is {{num()}}</h4>
+    <h4>Square value is {{numSquare()}}</h4>
+    <button (click)="decrement()">Decrement</button>
+    <button (click)="reset()" class="m-1">Reset</button>
+    <button (click)="increment()">Increment</button>
+	<hr/>
+	 @for(msg of messages();track $index){
+		<div>{{msg}}</div>
+     }@empty {
+		<div>No Messages to Show</div>
+	}
+</div>
+
+
+
+
+Program-67 : effects
+======================
+  httpClient = inject(HttpClient);
+  userId = signal(1);
+  userData: WritableSignal<any> = signal({})
+  userDetailsEffect = effect(() => {
+    const id = this.userId();
+    this.fetchUserDetails(id);
+  });
+  fetchUserDetails(id: number) {
+    this.httpClient.get(`https://jsonplaceholder.typicode.com/users/${id}`).subscribe(response => {
+      this.userData.set(response)
+    })
+  }
+  destroyEffect() {
+    this.userDetailsEffect.destroy()
+  }
+  incrementUserId() {
+    this.userId.update(val => val + 1);
+  }
+--------------------------------
+<h3 class="text-center">Let's Learn Signal & Effects</h3>
+<div class="col-sm-4 offset-4">
+  <div class="card">
+    <div class="card-body text-center">
+      <h5 class="card-title">{{userData().id}}</h5>
+      <h5 class="card-title">{{userData().username}}</h5>
+      <p class="card-text">{{userData().email}}</p>
+      <p class="card-text">{{userData().phone}}</p>
+      <p class="card-text">{{userData().address.city}}</p>
+      <p class="card-text">{{userData().website}}</p>
+      <button class="btn btn-primary" (click)="incrementUserId()">Increment</button>
+      <button class="btn btn-danger mx-2" (click)="destroyEffect()">Destroy Effect</button>
+    </div>
+  </div>
+</div>
+
+
+
+
+Program: Todo App Using Signal
+==============================
+interface Todo {
+  id: number;
+  title: string;
+  isCompleted: boolean;
+}
+export class ToDoAppWithSignal {
+  todos = signal<Todo[]>([
+    { id: 1, title: 'Learn Signals', isCompleted: false },
+    { id: 2, title: 'Build Todo App', isCompleted: true },
+    { id: 3, title: 'Build Project', isCompleted: false }
+  ]);
+
+  newTodo = signal('');
+  selectedFilter = signal<'all' | 'completed' | 'remaining'>('all');
+  completedTodos = computed(() =>
+    this.todos().filter(t => t.isCompleted)
+  );
+  remainingTodos = computed(() =>
+    this.todos().filter(t => !t.isCompleted)
+  );
+  totalTodos = computed(() => this.todos().length);
+  completionPercentage = computed(() =>
+    this.totalTodos() === 0
+      ? 0
+      : Math.round((this.completedTodos().length / this.totalTodos()) * 100)
+  );
+  filteredTodos = computed(() => {
+    switch (this.selectedFilter()) {
+      case 'completed': return this.completedTodos();
+      case 'remaining': return this.remainingTodos();
+      default: return this.todos();
+    }
+  });
+  addTodo() {
+    if (!this.newTodo().trim()) return;
+    const newItem: Todo = {
+      id: Date.now(),
+      title: this.newTodo(),
+      isCompleted: false
+    };
+    this.todos.update(list => [...list, newItem]);
+    this.newTodo.set('');
+  }
+
+  toggleTodo(id: number) {
+    this.todos.update(list =>
+      list.map(todo =>
+        todo.id === id
+          ? { ...todo, isCompleted: !todo.isCompleted }
+          : todo
+      )
+    );
+  }
+  deleteTodo(id: number) {
+    this.todos.update(list => list.filter(t => t.id !== id));
+  }
+  clearCompleted() {
+    this.todos.set(this.remainingTodos());
+  }
+  markAllCompleted() {
+    this.todos.update(list =>
+      list.map(t => ({ ...t, isCompleted: true }))
+    );
+  }
+  resetAll() {
+    this.todos.set([]);
+  }
+  setFilter(filter: 'all' | 'completed' | 'remaining') {
+    this.selectedFilter.set(filter);
+  }
+}
+---------------------------------------------
+<style>
+  .done {
+    text-decoration: line-through;
+    color: green;
+  }
+</style>
+<h3 class="text-center">Signal Based ToDo App</h3>
+
+<select (change)="setFilter($any($event.target).value)">
+  <option>all</option>
+  <option>completed</option>
+  <option>remaining</option>
+</select>
+
+<button class="btn btn-info mx-1" (click)="markAllCompleted()">Mark All Completed</button>
+<button class="btn btn-info mx-1" (click)="clearCompleted()">Clear Completed</button>
+<button class="btn btn-info mx-1" (click)="resetAll()">Reset All</button>
+
+<table class="table table-bordered mt-1">
+  <thead>
+    <tr>
+      <th>Task</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (todo of filteredTodos(); track todo.id) {
+    <tr [class.done]="todo.isCompleted">
+      <td>{{ todo.title }}</td>
+      <td>{{ todo.isCompleted ? 'Completed' : 'Pending' }}</td>
+      <td>
+        <button class="btn btn-primary mx-1" (click)="toggleTodo(todo.id)">Toggle</button>
+        <button class="btn btn-primary mx-1" (click)="deleteTodo(todo.id)">Delete</button>
+      </td>
+    </tr>
+    }
+  </tbody>
+</table>
+<div>
+  {{ completedTodos().length }} completed,
+  {{ remainingTodos().length }} pending,
+  out of total {{ totalTodos() }} Todos
+</div>
+<input placeholder="Enter todo" [value]="newTodo()" (input)="newTodo.set($any($event.target).value)" />
+<button class="btn btn-success mx-2" (click)="addTodo()">Add</button>
+
+
+
+
+
+
+program-68: Form with Class Names
+====================================
+<form name='myForm'>
+    Name:
+    <input name='uname' [(ngModel)]='name' required /><br><br>
+    Age:
+    <input name='uage'  [(ngModel)]='age' />
+</form>
+
+<style>
+    input.ng-invalid{
+        border:5px solid red;
+    }
+    input.ng-valid{
+        border:5px solid green;
+    }
+</style>
+
+
+
+
+program-69 : template driven form Example
+==========================================
+<form #myForm="ngForm" (ngSubmit)="logForm(myForm.value)">
+  <label>Firstname:</label>
+  <input type="text" name="firstname" ngModel>
+
+  <label>Lastname:</label>
+  <input type="text" name="lastname" ngModel>
+  
+  <div ngModelGroup='address'>
+	  <label>Street:</label>
+	  <input type="text" name="street" ngModel>
+
+	  <label>pin:</label>
+	  <input type="text" name="zip" ngModel>
+
+	  <label>City:</label>
+	  <input type="text" name="city" ngModel>
+  </div>
+	  
+  <button type="submit">Submit</button>
+</form>
+<h2> {{ myForm.value | json }} </h2>
+
+
+
+
+
+program-70 : Template Driven form with Validation 
+==================================================
+<h1 class="text-center">Template Driven Form</h1>
+
+<form #myForm="ngForm" (submit)="submitMyForm(myForm)">
+    <div>
+        First Name: <input #fname="ngModel" name="firstName" ngModel required minlength="5" />
+
+        <span class="text-danger" *ngIf="fname.hasError('required') && fname.dirty">FirstName is required</span>
+        <span class="text-danger" *ngIf="fname.hasError('minlength') && fname.dirty">FirstName should have minimum 5
+            characters</span>
+    </div>
+    <div>
+        Last Name: <input #lname="ngModel" name="lastName" ngModel required minlength="5" />
+
+        <span class="text-danger" *ngIf="lname?.errors?.['required'] && lname.dirty">lastName is required</span>
+        <span class="text-danger" *ngIf="lname?.errors?.['minlength'] && lname.dirty">minimum 5 chars</span>
+    </div>
+    <div>
+        Email: <input #email="ngModel" name="email" ngModel required email />
+    </div>
+    <fieldset ngModelGroup="address">
+        <div>
+            Street Name: <input #street="ngModel" name="street" ngModel />
+        </div>
+        <div>
+            City: <input #city="ngModel" name="city" ngModel />
+        </div>
+        <div>
+            PIN: <input #pin="ngModel" name="pin" ngModel />
+        </div>
+    </fieldset>
+
+    <button type="submit" [disabled]="myForm.invalid" >Submit</button>
+    <button type="reset">reset</button>
+</form>
+
+<h3>{{myForm.value | json}}</h3>
+
+<h3>{{fname.value}}</h3>
+<div>{{fname.errors | json}}</div>
+<div>{{fname.valid | json}}</div>
+
+<div></div>
+
+
+
+
+
+
+program-71 : Form with Signal
+=============================
+ loginModel = signal({ email: '', password: '' });
+
+  loginForm = form(this.loginModel, (schema) => {
+    required(schema.email, { message: 'Email is required' });
+    email(schema.email, { message: 'Email Format is not correct' });
+    minLength(schema.email, 5, { message: 'Email Should have minimum 5 chars' });
+  });
+-----------------------------------------------------------
+<h3 class="text-center">Let's Learn Signal Form</h3>
+<div class="border border-3 rounded-3 p-3 mt-3 offset-3 col-sm-5">
+  <form>
+    <p>
+      Email: <input type="email" [formField]="loginForm.email" />
+      @if(loginForm.email().touched() && loginForm.email().invalid()){
+    <div>
+      @for (error of loginForm.email().errors(); track $index) {
+      <div class="text-danger">{{error.message}}</div>
+      }
+    </div>
+    }
+    </p>
+    <p>password: <input type="email" [formField]="loginForm.password" /></p>
+    <input type="reset" value="Reset" />
+    <input class="mx-1" type="submit" value="Submit" [disabled]="loginForm().invalid()" />
+  </form>
+  <div>Email: {{loginForm.email().value()}} </div>
+  <div>Password Length: {{loginForm.password().value().length}} </div>
+</div>
+
+
+
+
+
+
+program-72 : Model driven form example
+=======================================
+<form [formGroup]="registerForm">
+  <label>Firstname:</label>
+  <input type="text" formControlName="firstname">
+
+  <label>Lastname:</label>
+  <input type="text" formControlName="lastname">
+  <div formGroupName='address'>
+	  <label>Street:</label>
+	  <input type="text" formControlName="street">
+
+	  <label>Zip:</label>
+	  <input type="text" formControlName="zip">
+
+	  <label>City:</label>
+	  <input type="text" formControlName="city">
+  </div>
+  
+  <button type="submit">Submit</button>
+</form>
+<h2>{{registerForm.value | json}}</h2>
+
+*****************
+import { Component } from '@angular/core';
+import { FormGroup, FormControl } from '@angular/forms';
+
+@Component({
+  selector: 'my-app',
+  ...
+})
+export class AppComponent {
+
+  registerForm = new FormGroup({
+    firstname: new FormControl(),
+    lastname: new FormControl(),
+    address: new FormGroup({
+      street: new FormControl(),
+      zip: new FormControl(),
+      city: new FormControl()
+    })
+  });
+}
+
+
+
+
+program-73 : Model driven form with validation
+===============================================
+<div>
+    <h2> Model Driven Forms </h2>
+    <hr>
+    <form [formGroup]="myForm" (submit)="submitMyForm()">
+      Name:
+      <input pattern='[a-z]+'  id="name" formControlName="name" required>
+      <span *ngIf="myForm.controls.name.hasError('required') && myForm.controls.name.dirty"> Name Required </span>
+      <span *ngIf="myForm.controls.name.hasError('pattern') && myForm.controls.name.dirty"> Wrong Pattern </span>
+      <br><br>
+  
+      Age:
+      <input  id="age" formControlName="age">
+      <br><br> 
+      
+      Address:
+      <input  id="address" formControlName="address" >
+      <span *ngIf="address.hasError('required') && address.dirty"> Address is Required </span>
+      <span *ngIf="address.hasError('minlength') && address.dirty"> Min 5 characters Required </span>
+      <span *ngIf="address.hasError('maxlength') && address.dirty"> max 10 characters allowed </span>
+      <br><br>
+  
+      <button type="submit" [disabled]="!myForm.valid">Submit</button>
+      &nbsp;
+      <button type="reset"> Reset </button>
+  
+    </form>
+    <hr>
+    <div> Form Value: {{myForm.value | json }} </div>
+    <div> Form Status:{{myForm.status | json }} </div>
+  </div>
+***************
+import { Component } from '@angular/core';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: 'app.component.html'
+})
+export class AppComponent {
+  myFormBuilder;
+  myForm;
+
+  constructor() {
+    this.myFormBuilder = new FormBuilder();
+    this.generateForm();
+  }
+  
+  get age() {
+    return this.myForm.get('age')
+  }
+  get address() {
+    return this.myForm.get('address')
+  }
+  generateForm() {
+    let formControlObj1 = new FormControl('sachin', [Validators.required,
+    Validators.pattern('[a-zA-z]+')]);
+    let formControlObj2 = new FormControl('35');
+    let formControlObj3 = new FormControl('mumbai', {
+		validators : [Validators.required,Validators.pattern('[a-zA-z]+')],
+		updateOn : 'blur'
+	});
+
+    this.myForm = this.myFormBuilder.group({
+      name: formControlObj1,
+      age: formControlObj2,
+      address: formControlObj3
+    })
+  }
+
+  submitMyForm() {
+    alert(`Name: ${this.myForm.value.name} Age: ${this.myForm.value.age} Address: ${this.myForm.value.address}`);
+  }
+}
+
+
+
+program-74  :  dynamic Form
+=============================
+import { Component } from '@angular/core';
+import { FormGroup, FormArray, FormBuilder } from '@angular/forms';
+ 
+@Component({
+  selector: 'my-app',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  empForm: FormGroup;
+  constructor(private fb: FormBuilder) {
+    this.empForm = this.fb.group({
+      employees: this.fb.array([])
+    });
+  }
+
+  getAllEmployees(): FormArray {
+    return this.empForm.get('employees') as FormArray;
+  }
+
+  createNewEmployee(): FormGroup {
+    return this.fb.group({
+      firstName: '',
+      lastName: '',
+      skills: this.fb.array([])
+    });
+  }
+
+  addEmployee() {
+    this.getAllEmployees().push(this.createNewEmployee());
+  }
+
+  removeEmployee(empIndex: number) {
+    this.getAllEmployees().removeAt(empIndex);
+  }
+
+  employeeSkills(empIndex: number): FormArray {
+    return this.getAllEmployees().at(empIndex).get('skills') as FormArray;
+  }
+
+  newSkill(): FormGroup {
+    return this.fb.group({skill: '',exp: ''});
+  }
+
+  addEmployeeSkill(empIndex: number) {
+    this.employeeSkills(empIndex).push(this.newSkill());
+  }
+
+  removeEmployeeSkill(empIndex: number, skillIndex: number) {
+    this.employeeSkills(empIndex).removeAt(skillIndex);
+  }
+
+  onSubmit() {
+    console.log(this.empForm.value);
+  }
+}
+----------------------------------
+<style>
+  button {
+  margin: 5px
+}
+</style>
+<h1>Angular Nested FormArray / Dynamic FormArray</h1>
+<form [formGroup]="empForm" (ngSubmit)="onSubmit()">
+  <div formArrayName="employees">
+    @for (employee of getAllEmployees().controls; track employee; let empIndex = $index) {
+      <div>
+        <div [formGroupName]="empIndex" style="border: 3px solid blue; padding: 10px; width: 700px; margin: 10px;">
+          {{empIndex}} First Name :
+          <input type="text" formControlName="firstName" />
+          Last Name:
+          <input type="text" formControlName="lastName" />
+          <button (click)="removeEmployee(empIndex)">Remove</button>
+          <div formArrayName="skills">
+            @for (skill of employeeSkills(empIndex).controls; track skill; let skillIndex = $index) {
+              <div>
+                <div [formGroupName]="skillIndex">
+                  {{skillIndex}} Skill :
+                  <input type="text" formControlName="skill" />
+                  Exp:
+                  <input type="text" formControlName="exp" />
+                  <button (click)="removeEmployeeSkill(empIndex,skillIndex)">
+                    X
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+          <button type="button" (click)="addEmployeeSkill(empIndex)">
+            Add Skill
+          </button>
+        </div>
+      </div>
+    }
+    <button type="button" (click)="addEmployee()">Add Employee</button>
+  </div>
+</form>
+
+<pre>{{this.empForm.value | json}}</pre>
+
+ 
+
+
+
+
+
+program-75 :  Custom Validation
+================================
+
+createPasswordStrengthValidator
+---------------------------------
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+export function createPasswordStrengthValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+        const value = control.value;
+        if (!value) {
+            return null;
+        }
+        const hasUpperCase = /[A-Z]+/.test(value);
+        const hasLowerCase = /[a-z]+/.test(value);
+        const hasNumeric = /[0-9]+/.test(value);
+        const passwordValid = hasUpperCase && hasLowerCase && hasNumeric;
+        return !passwordValid ? { passwordStrength: true } : null;
+    }
+}
+
+
+
+ageRangeValidator
+=================
+import { AbstractControl, ValidatorFn } from "@angular/forms";
+function ageRangeValidator(min: number, max: number): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
+        if (control.value !== undefined && (isNaN(control.value) || control.value < min || control.value > max)) {
+            return { 'ageRange': true };
+        }
+        return null;
+    };
+}
+
+
+Async validator
+================
+userService
+-----------
+findUserByEmail(email: string) {
+    return this.http.get(`https://jsonplaceholder.typicode.com/users?email=${email}`)
+  }
+
+
+UserExistsValidator.ts
+----------------------
+import { inject } from "@angular/core";
+import { AbstractControl, AsyncValidatorFn } from "@angular/forms";
+import { map } from "rxjs";
+import { UserService } from "../services/user.service";
+export function userExistsValidator(): AsyncValidatorFn {
+    const userService = inject(UserService);
+    return (control: AbstractControl) => {
+        return userService.findUserByEmail(control.value).pipe(
+            map((user: any) => user.length ? { userExists: true } : null)
+        );
+    }
+}
+
+
+
+
+Program-76 : Password Generator
+================================
+<div class="container">
+  <h2>🔐 Angular Password Generator</h2>
+
+  <label>
+    Length: 
+    <input type="number" [(ngModel)]="length" min="4" max="50">
+  </label>
+
+  <label>
+    <input type="checkbox" [(ngModel)]="includeUppercase" />
+    Uppercase (A-Z)
+  </label>
+
+  <label>
+    <input type="checkbox" [(ngModel)]="includeLowercase" />
+    Lowercase (a-z)
+  </label>
+
+  <label>
+    <input type="checkbox" [(ngModel)]="includeNumbers" />
+    Numbers (0-9)
+  </label>
+
+  <label>
+    <input type="checkbox" [(ngModel)]="includeSymbols" />
+    Symbols (!@#$)
+  </label>
+
+  <button (click)="generatePassword()">Generate Password</button>
+
+  <div class="output">
+    <p>{{ password }}</p>
+    <button (click)="copyToClipboard()">📋 Copy</button>
+  </div>
+</div>
+------------------------------
+  length: number = 8;
+  includeUppercase: boolean = true;
+  includeLowercase: boolean = true;
+  includeNumbers: boolean = true;
+  includeSymbols: boolean = false;
+
+  password: string = '';
+
+  generatePassword() {
+    const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const lower = 'abcdefghijklmnopqrstuvwxyz';
+    const numbers = '0123456789';
+    const symbols = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+
+    let validChars = '';
+    if (this.includeUppercase) validChars += upper;
+    if (this.includeLowercase) validChars += lower;
+    if (this.includeNumbers) validChars += numbers;
+    if (this.includeSymbols) validChars += symbols;
+
+    if (!validChars) {
+      this.password = '⚠️ Select at least one option';
+      return;
+    }
+
+    let generated = '';
+    for (let i = 0; i < this.length; i++) {
+      const index = Math.floor(Math.random() * validChars.length);
+      generated += validChars[index];
+    }
+
+    this.password = generated;
+  }
+
+  copyToClipboard() {
+    navigator.clipboard.writeText(this.password);
+    alert('Password copied to clipboard!');
+  }
+
+
+
+
+
+
+
+
+
+
+
+program-77 : routing
+=====================
+1. create components
+	ng g c home
+	ng g c aboutus
+	ng g c career
+	ng g c notfound
+
+2. in app.routes.ts configure all the routes.
+	const routes: Routes = [
+	  { path: 'home', component: HomeComponent },
+	  { path: 'aboutus', component: AboutusComponent },
+	  { path: 'careers', component: CareersComponent },
+	  { path: '', component: HomeComponent },
+	  { path: '**', component: NotfoundComponent },
+	];
+
+Note: all these routes:[] are used in app.config.ts
+     provideRouter(routes)
+
+3. use router-outlet in HTML & import 'RouterOutlet' in Typescript file
+    <router-outlet></router-outlet>
+   
+   
+4.  Add below code in Nav-bar.component.html  & import 'RouterLink' in Typescript file
+   <a class="nav-link" routerLink="home">Home</a>
+   <a class="nav-link" routerLink="aboutus">Aboutus</a>
+   <a class="nav-link" routerLink="careers">Careers</a>
+
+
+	
+
+Program-78 : Path Param Example
+==============================
+1. create productDetailsComponent
+   ng g c productDetails
+   
+2. add the below code in app.routes.ts
+   {
+    path: 'productdetails/:id', 
+    component: ProductdetailsComponent
+   }
+  
+3. add the below code in products.html
+   <button class="btn btn-primary" [routerLink]="['/productdetails', x.id]">
+        View Details</button>
+		
+4. add the below code in productdetails.comp.ts
+   constructor(private activatedRoute: ActivatedRoute) 
+   {
+   }
+   ngOnInit() {
+    this.activatedRoute.params.pipe(switchMap((params: any) =>
+        this.http.get(`https://jsonplaceholder.typicode.com/users/${params.id}`)
+      )).subscribe((userResponse: any) => {
+      this.user = userResponse;
+    });
+  }	
+
+5. add the below code in productdetails.component.html
+	<h1>This is details for product- {{id}}
+	
+	
+	
+
+program-79 : Query-param example
+=================================
+1. create productDetailsComponent
+    ng g c productDetails
+	
+2. add the component in route configuration
+   {
+    path: 'productdetails', 
+    component: ProductdetailsComponent
+  }
+  
+3. add the below code in products.html
+   <button class="btn btn-primary mx-1" [routerLink]="['/productdetails']"
+            [queryParams]="{id:product.id,name:product.title,price:product.price}">Details</button>
+		
+4. add the below code in productdetails.comp.ts
+	constructor(public activatedRoute: ActivatedRoute) {		
+	}
+	ngOnInit(){
+		this.activatedRoute.queryParams.subscribe((queryparams) => {
+		  console.log(queryparams);
+		  this.prod = queryparams;
+		});
+	}
+
+
+
+Nested Route
+============
+1. Create Nested Route Components
+   ng g c components/permanentjobs 
+   ng g c components/contractjobs
+2. add those components as nested route in app.routes.ts
+    {
+    path: 'careers',
+    component: CareersComponent,
+    children: [
+      { path: 'permanent', component: PermanentjobsComponent },
+      { path: 'contract', component: ContractjobsComponent },
+    ]
+  }
+3. in main route(Careers.html) add links & <router-outlet>
+    <div class="col-sm-2">
+      <div><a routerLink="permanent">Permanent Jobs</a></div>
+      <div><a routerLink="contract">Contract Jobs</a></div>
+    </div>
+    <div class="col-sm-10">
+      <router-outlet></router-outlet>
+    </div>
+	  
+
+
+	  
+Program-80 : Router Guard
+==========================
+import { CanActivateFn } from '@angular/router';
+export const authGuard: CanActivateFn = (route, state) => {
+  // Inject user service, Read user info from user service
+  const user = { name: 'sanjay', role: 'admin1' };
+  if (user.role === 'admin') {
+    return true;
+  } else {
+    alert('Sorry!!! You dont have access to this page')
+    return false;
+  }
+};
+
+
+	{
+        path: 'product-details',
+        component: ProductDetailsComponent,
+        canActivate: [myGuard]
+    },
+
+
+can-deactivate
+==============
+import { CanDeactivateFn } from '@angular/router';
+export const hasChangesGuard: CanDeactivateFn<unknown> =
+  (component: any, currentRoute, currentState, nextState) => {
+    if (component?.isDirty) {
+      alert('Please save your changes before you leave this route');
+      return false;
+    } else {
+      return true
+    }
+  };
+
+ 
+
+program-81 : Route resolver Example
+=====================================
+1. create ProductService and add the below code
+
+	import { HttpClient } from '@angular/common/http';
+	import { Injectable } from '@angular/core';
+	@Injectable({
+	  providedIn: 'root'
+	})
+	export class ProductService {
+	  constructor(public http: HttpClient) { }
+	  getProductDetails(id: number) {
+		const url = `https://fakestoreapi.com/products/${id}`;
+		return this.http.get(url);
+	  }
+	}
+
+
+2. create productdetailResolver and add the below code
+
+	import { HttpClient } from '@angular/common/http';
+	import { inject } from '@angular/core';
+	import { ResolveFn } from '@angular/router';
+	import { ProductService } from '../services/product.service';
+
+	export const productdetailsResolver: ResolveFn<Object> = (route, state) => {
+	  const id = +route.params['id'];
+	  return inject(ProductService).getProductDetails(id);
+	};
+
+3. add the below code in app.route.ts
+	 {
+        path: 'productdetails/:id',
+        component: ProductdetailsComponent,
+        resolve: { product: productdetailsResolver }
+    }
+4. Add the below code in productdetails.component.ts
+
+	  constructor(private activatedRoute: ActivatedRoute) { }
+	  ngOnInit() {
+		console.log( this.activatedRoute)
+		this.activatedRoute.data.subscribe((response: any) => {
+		  this.product = response.product; // to be shown in UI
+		});
+	  }
+
+
+
+ 
+Program-82 : Folder Explorer(Folder-Emoji)
+===========================================
+import { CommonModule } from '@angular/common';
+import { Component, Input } from '@angular/core';
+@Component({
+  selector: 'app-folder-explorer',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './folder-explorer.component.html',
+  styleUrl: './folder-explorer.component.css',
+  inputs: ['folderObj']
+})
+export class FolderExplorerComponent {
+  folderObj: any;
+  isExpanded: boolean = false;
+}
+---------------------------
+@if (folderObj.isFolder) {
+  <div (click)="isExpanded=!isExpanded" style="cursor:pointer">
+    📁 <span>{{ folderObj.name }}</span>
+  </div>
+  @if (isExpanded) {
+    <div style="padding-left: 20px;">
+      @for (item of folderObj.items; track item) {
+        <div>
+          <app-folder [folderObj]="item"></app-folder>
+        </div>
+      }
+    </div>
+  }
+}@else{
+    <div>
+        📑 <span>{{ folderObj.name }}</span>
+      </div>
+}
+
+ 
+ 
+ 
+Program-83 : traffic Application
+=================================
+import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+@Component({
+  selector: 'app-traffic-signal',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './traffic-signal.component.html',
+  styleUrl: './traffic-signal.component.css'
+})
+export class TrafficSignalComponent {
+  config: any;
+  colorsArr: string[];
+  selectedColor: string = 'red';
+  timer: any;
+  constructor(private cdr:ChangeDetectorRef) {
+    this.config = {
+      "red": { nextColor: 'green', duration: 3000 },
+      "green": { nextColor: 'yellow', duration: 5000 },
+      "yellow": { nextColor: 'red', duration: 2000 }
+    };
+    this.colorsArr = Object.keys(this.config);
+  }
+  ngDoCheck() {
+    const { duration, nextColor } = this.config[this.selectedColor];
+    this.timer = setTimeout(() => {
+      this.selectedColor = nextColor;
+	  this.cdr.markForCheck();
+    }, duration)
+  }
+  ngOnDestroy() {
+    clearTimeout(this.timer);
+  }
+}
+
+===============
+<div class="wrapper">
+  <div class='traffic-light-container traffic-light-container--vertical'>
+    @for (color of colorsArr; track color) {
+        <div class="traffic-light" [style.background-color]="color === selectedColor ? selectedColor:'' ">
+        </div>
+    }
+  </div>
+</div>
+=================
+.wrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 16px;
+    justify-content: center;
+}
+.traffic-light-container {
+    background-color: #000;
+    border-radius: 8px;
+    display: flex;
+    padding: 8px;
+    gap: 8px;
+}
+.traffic-light-container--vertical {
+    flex-direction: column;
+}
+.traffic-light {
+    background-color: #555;
+    border-radius: 50px;
+    height: 50px;
+    width: 50px;
+}
+
+
+ 
+
+Program-85  : Testing Service with HttpClient
+================================================
+import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
+import { UserService } from './user.service';
+
+describe('UserService', () => {
+  let service: UserService;
+  let httpTestingController: HttpTestingController;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideZonelessChangeDetection()
+      ]
+    });
+    service = TestBed.inject(UserService);
+    httpTestingController = TestBed.inject(HttpTestingController);
+  });
+  afterEach(() => {
+    // Ensure no outstanding requests
+    httpTestingController.verify();
+  });
+
+  it('user service should be created', () => {
+    expect(service).toBeTruthy();
+  });
+  it('should fetch data using GET request', () => {
+    const dummyUsers = [
+      { id: 1, name: 'Leanne Graham' },
+      { id: 2, name: 'Ervin Howell' }
+    ];
+    service.getAllUsers().subscribe((users:any) => {
+      expect(users).toEqual(dummyUsers);
+      expect(users.length).toBe(2);
+    });
+    // Expect the GET request
+    const req = httpTestingController.expectOne('https://jsonplaceholder.typicode.com/users');
+    expect(req.request.method).toBe('GET');
+    // Respond with mock data
+    req.flush(dummyUsers);
+  });
+});
+
+
+
+Testing Component with HttpClient
+==================================
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { UserListComponent } from './user-list.component';
+import { provideHttpClient } from '@angular/common/http';
+import { UserService } from '../../services/user.service';
+import { of } from 'rxjs';
+describe('UserListComponent', () => {
+  let component: UserListComponent;
+  let fixture: ComponentFixture<UserListComponent>;
+  let userService : UserService;
+
+  beforeEach(async () => { 
+    await TestBed.configureTestingModule({
+      imports: [UserListComponent],
+      providers: [
+        provideHttpClient(),
+        UserService
+      ]
+    })
+      .compileComponents();
+
+    fixture = TestBed.createComponent(UserListComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    userService = TestBed.inject(UserService)
+  });
+ 
+  it('should verify getAllUsers', () => {
+    const mockresponse: any[] = [{}, {}];
+    spyOn(userService, 'getAllUsers').and.returnValue(of(mockresponse));
+    component.fetchUsers();
+    fixture.detectChanges();
+    expect(component.users.length).toBe(2);
+  });
+});
+
+
+Stub & Spy Demo
+===============
+class WeatherService {
+  getTemperature(city) {
+    // Simulate an API call
+    throw new Error("Real API call not implemented");
+  }
+}
+class WeatherProcessor {
+  constructor(weatherService) {
+    this.weatherService = weatherService;
+  }
+  isHot(city) {
+    const temperature = this.weatherService.getTemperature(city);
+    return temperature > 30; // Hot if temperature > 30°C
+  }
+}
+------------------------
+describe("WeatherProcessor", function () {
+  let weatherService, weatherProcessor;
+
+  beforeEach(function () {
+    weatherService = new WeatherService();
+    weatherProcessor = new WeatherProcessor(weatherService);
+  });
+
+  it("should determine if the weather is hot using a stubbed temperature", function () {
+    // Stub the getTemperature method
+    spyOn(weatherService, "getTemperature").and.returnValue(35);
+
+    const result = weatherProcessor.isHot("New York");
+    
+    // Verify results
+    expect(weatherService.getTemperature).toHaveBeenCalledWith("New York");
+    expect(result).toBe(true); // 35 > 30, so it's hot
+  });
+
+  it("should determine if the weather is not hot using a stubbed temperature", function () {
+    // Stub the getTemperature method
+    spyOn(weatherService, "getTemperature").and.returnValue(20);
+
+    const result = weatherProcessor.isHot("London");
+    
+    // Verify results
+    expect(weatherService.getTemperature).toHaveBeenCalledWith("London");
+    expect(result).toBe(false); // 20 < 30, so it's not hot
+  });
+
+  it("should track how many times getTemperature is called", function () {
+    // Spy on the getTemperature method without changing behavior
+    spyOn(weatherService, "getTemperature").and.callFake(() => 25);
+
+    weatherProcessor.isHot("Paris");
+    weatherProcessor.isHot("Berlin");
+    
+    // Verify spy tracking
+    expect(weatherService.getTemperature).toHaveBeenCalledTimes(2);
+    expect(weatherService.getTemperature).toHaveBeenCalledWith("Paris");
+    expect(weatherService.getTemperature).toHaveBeenCalledWith("Berlin");
+  });
+});
+
+
+
+
+
+Program-86 : Counter App using NgRx
+===================================
+1. Install NgRx Store in the project
+    ng add @ngrx/store
+   
+2. Create action File (counter.actions.ts)
+	import { createAction } from '@ngrx/store';
+	export const increment = createAction('[Counter Component] Increment');
+	export const decrement = createAction('[Counter Component] Decrement');
+	export const reset = createAction('[Counter Component] Reset');
+	
+3. Create Reducer File(counter.reducer.ts)
+	import { createReducer, on } from '@ngrx/store';
+	import { increment, decrement, reset } from '../actions/counter.actions';
+	const initialState = 0;
+	export const counterReducer = createReducer(
+		initialState,
+		on(increment, (state) => state + 1),
+		on(decrement, (state) => state - 1),
+		on(reset, (state) => 0)
+	);
+	
+4. create a store file (store.ts)
+	export const myStore = {
+		countReducer
+      }
+	  
+5. Provide the Store to the whole application(app.config.ts)
+   providers: [
+    provideStore(myStore)
+  ]
+
+6. Create Counter Component (counter.component.ts)
+  count$: Observable<number>;
+  constructor(private store: Store) {
+    this.count$ = store.select((state: any) => state.counterReducer);
+    console.log(this.count$)
+  }
+  increment() {
+    this.store.dispatch(increment())
+  }
+  
+7. Counter.component.html
+   <h2>Count value is : {{count$ | async}}</h2>
+   <button (click)="increment()">Increment</button>
+
+
+
+
+Program-87 : ToDo App using NgRx
+=================================
+1. Install NgRx Store in the project
+   ng add @ngrx/store
+   
+2. Create action File (todo.actions.ts)
+	import { createAction, props } from '@ngrx/store';
+	import { Todo } from '../models/todo';
+	export const addTodo = createAction('Add Todo', props<{ payload: Todo }>());
+	export const deleteTodo = createAction('Delete Todo', props<{ id: number }>());
+	export const toggleTodo = createAction('Toggle Todo', props<{ id: number }>());
+	
+3. create ToDo model (ng g interface models/todo) 
+    export interface Todo {
+	  id: number;
+	  text: string;
+	  isCompleted: boolean;
+	}
+
+4. Create Reducer File(todo.reducer.ts)
+	import { createReducer, on } from '@ngrx/store';
+	import { addTodo, deleteTodo, toggleTodo } from '../actions/todo.actions';
+	export const initialState = [
+		{ id: 1, text: 'Learn javascript', isCompleted: true },
+		{ id: 2, text: 'Go to Gym', isCompleted: false },
+		{ id: 3, text: 'Buy Grocery', isCompleted: false },
+	];
+	export const todoReducer = createReducer(
+		initialState,
+		on(addTodo, (state, action: any) => {
+			return [...state, action.payload]
+		}),
+		on(deleteTodo, (state, action: any) => {
+			return state.filter(todo => todo.id != action.id);
+		}),
+		on(toggleTodo, (state, action: any) => {
+			return state.map((todo) => {
+				return todo.id !== action.id
+					? todo
+					: { ...todo, isCompleted: !todo.isCompleted }
+			});
+		})
+	);
+	
+5. create/update  store file (store.ts)
+	export const myStore = {
+		countReducer,todoReducer
+      }
+	  
+6. Provide the Store to the whole application(app.config.ts)
+   providers: [
+    provideStore(myStore)
+  ]
+
+7. Create ToDoCrud Component (todocrud.component.ts)
+  todos$: Observable<any> | undefined;
+  constructor(private store: Store) {
+    this.todos$ = this.store.select((state: any) => state.todoReducer);
+  }
+  deleteMyTodo(id: number) {
+    this.store.dispatch(deleteTodo({ id: id }));
+  }
+  toggleMyTodo(id: number) {
+    this.store.dispatch(toggleTodo({ id: id }));
+  }
+  
+8. todocrud.component.html
+    <h3 class="text-center">This is Todo CRUD Component using NGRX</h3>
+	<div class="border border-3 p-2 text-center col-sm-4 offset-4">
+		<ol>
+			@for(todo of todos$|async;track $index){
+			<li class="my-2">
+				<span [ngStyle]="{ 'text-decoration': todo.isCompleted ? 'line-through' : 'none' }">{{todo.text}} &nbsp; {{todo.isCompleted}}
+					&nbsp;</span>
+				<button class="btn btn-danger" (click)="deleteMyTodo(todo.id)">Delete</button>
+				<button class="btn btn-secondary mx-1" (click)="toggleMyTodo(todo.id)">Toggle</button>
+			</li>
+			}
+		</ol>
+	</div>
+   
+   
+
+
+Program-88 : Employee CRUD using NgRx
+=====================================
+1. Install  Store & Effect in the project
+   ng add @ngrx/store
+   ng add @ngrx/effects
+   
+2. Create action File (employee.actions.ts)
+	import { createAction, props } from '@ngrx/store';
+	import { Employee } from '../models/employee';
+	export const fetchEmployees = createAction('[EmployeeList Page] Fetch Employees');
+	export const fetchEmployeesSucess = createAction(
+		'[Employees API] Employees Loaded Successfully',
+		props<{ payload: Employee[] }>()
+	);
+	export const fetchEmployeesError = createAction('[Employees API] Employees Loaded Error');
+	export const deleteEmployee = createAction(
+		'[Employees API] Delete Employee',
+		props<{ id: string }>()
+	);
+	export const addEmployee = createAction(
+		'[Employees API] Add Employee',
+		props<{ employee:Employee }>()
+	);
+	
+3. Create Reducer File(employee.reducer.ts)
+	import { createReducer, on } from '@ngrx/store';
+	import { fetchEmployeesSucess } from '../actions/employee.actions';
+	export const initialState = [];
+	export const employeesReducer = createReducer(
+	  initialState,
+	  on(fetchEmployeesSucess, (state, action: any) => {
+		return action.payload;
+	  }),
+	);
+
+4. Create Effect File (employee.effects.ts)
+	import { Injectable } from '@angular/core';
+	import { Actions, createEffect, ofType } from '@ngrx/effects';
+	import { of } from 'rxjs';
+	import { map, exhaustMap, catchError } from 'rxjs/operators';
+	import { EmployeeService } from '../../services/employee-service';
+	import { addEmployee, deleteEmployee, fetchEmployees } from '../actions/employee.actions';
+	
+	@Injectable()
+	export class EmployeeEffects {
+		loadEmployees$: any;
+		deleteEmployee$: any;
+		addEmployee$: any;
+		actions$ = inject(Actions);
+		employeeService = inject(EmployeeService);
+		constructor() {
+        this.loadEmployees$ = createEffect(() => this.actions$.pipe(
+            ofType(fetchEmployees),
+            exhaustMap(() => this.employeeService.fetchAllEmployees()
+                .pipe(
+                    map(Employees =>
+                        ({ type: '[Employees API] Employees Loaded Successfully', payload: Employees })
+                    ),
+                    catchError(() => of({ type: '[Employees API] Employees Loaded Error' }))
+                ))
+        ));
+        this.deleteEmployee$ = createEffect(() => this.actions$.pipe(
+            ofType(deleteEmployee),
+            exhaustMap((action: any) => this.employeeService.deleteEmployee(action.id)
+                .pipe(
+                    map(Employee => {
+                        alert('Employee Deleted Succesfully');
+                        return ({ type: '[EmployeeList Page] Fetch Employees' })
+                    }),
+                    catchError(() => of({ type: '[Employees API] Employee Delete Error' }))
+                ))
+        ));
+        this.addEmployee$ = createEffect(() => this.actions$.pipe(
+            ofType(addEmployee),
+            exhaustMap((action: any) => this.employeeService.addEmployee(action.employee)
+                .pipe(
+                    map(Employee => {
+                        alert('Employee Added Succesfully');
+                        return ({ type: '[EmployeeList Page] Fetch Employees' })
+                    }),
+                    catchError(() => of({ type: '[Employees API] Employee Add Error' }))
+                ))
+        ));
+    }
+		
+}
+
+5. create employee.service.ts
+	import { HttpClient } from '@angular/common/http';
+	import { Injectable } from '@angular/core';
+	@Injectable({
+	  providedIn: 'root'
+	})
+	export class EmployeeService {
+	  constructor(private httpClient: HttpClient) { }
+	  fetchAllEmployees() {
+		return this.httpClient.get('http://localhost:3000/employees');
+	  }
+	  deleteEmployee(id: string) {
+		return this.httpClient.delete(`http://localhost:3000/employees/${id}`)
+	  }
+	  addEmployee(newEmp: any) {
+		return this.httpClient.post('http://localhost:3000/employees', newEmp)
+	  }
+	}
+
+
+6. Provide the Store & effect(app.config.ts)
+    providers: [
+		provideStore({ employees: employeesReducer }),
+		provideEffects(EmployeeEffects)
+    ]
+
+7. Add Employee-list and add-employee component
+	  employees$: Observable<Employee[]> | undefined;
+	  constructor(private store: Store<{ employees: Employee[] }>) {
+		this.employees$ = this.store.select(state => state.employees);
+	  }
+	  ngOnInit() {
+		// this.store.dispatch({ type: '[EmployeeList Page] Fetch Employees' });
+		this.store.dispatch(fetchEmployees());
+	  }
+	  deleteEmp(id: string) {
+		const flag = confirm('Are you sure, You want to delete this record?')
+		if (flag) {
+		  this.store.dispatch(deleteEmployee({ id }));
+		}
+	  }
+
+
+
+
+Program-89 : angular & GraphQL
+===============================
+1. install apollo-angular
+   ng add apollo-angular
+   
+2. in app.config.ts add backend URL
+   uri: 'https://countries.trevorblades.com/graphql'
+   
+3. To Fetch Data From GraphQL API add the below code in component
+
+  countries: any;
+  constructor(private readonly apollo: Apollo) {
+  }
+  ngOnInit() {
+    this.fetchCountries();
+  }
+  fetchCountries() {
+    const GET_COUNTRIES = gql`
+    query GetCountries {
+      countries {
+        code,name,currency
+      }
+    }
+  `;
+    const queryRef = this.apollo.watchQuery<any>({ query: GET_COUNTRIES });
+    queryRef.valueChanges.subscribe((response: any) => {
+      console.log(response);
+      this.countries = response.data.countries;
+    });
+  }
+  
+4. use the data in HTML file
+   <table class="table table-bordered table-striped">
+	  <tbody>
+		@for (country of countries; track $index) {
+		  <tr>
+			<td>{{country.code}}</td>
+			<td>{{country.name}}</td>
+			<td>{{country.currency}}</td>
+		  </tr>
+		}
+	  </tbody>
+  </table>
+  
+  
+  
+  
+program-90 : Cypress Testing
+==============================
+describe('My First Test', () => {
+  it('Visits the initial project page', () => {
+    cy.visit('/')
+    cy.contains('Databinding Component')
+    cy.title().should('eq', 'AngularProjectOct2024');
+    cy.get('#box1').should('exist');
+    cy.get('#box2').should('exist');
+    cy.get('#box3').should('not.exist');
+  })
+  it('Should verify addition functionality', () => {
+    cy.visit('/')
+    cy.get('#box1').type('10');
+    cy.get('#box2').type('20');
+    cy.get('#addition').click();
+    cy.contains('Addition of 10 & 20 is 30')
+    cy.get('#box1').type('0');
+    cy.get('#box2').type('0');
+    cy.get('#addition').click();
+    cy.contains('Addition of 100 & 200 is 300')
+  })
+})
+
+
+Program-91  : App_Initializer 
+=============================
+1. Create a Configuration Service
+import { Injectable } from '@angular/core';
+@Injectable({
+  providedIn: 'root',
+})
+export class ConfigService {
+  private config: any;
+  constructor() {}
+  loadConfig(): Promise<void> {
+    // Simulate an async operation like an HTTP request
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        this.config = { apiUrl: 'https://api.example.com', featureFlag: true };
+        console.log('Configuration loaded:', this.config);
+        resolve();
+      }, 1000);
+    });
+  }
+  getConfig(): any {
+    return this.config;
+  }
+}
+
+2. Use APP_INITIALIZER to Load Config (app.config.ts)
+  providers: [
+    ConfigService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeApp,
+      deps: [ConfigService],
+      multi: true
+    }
+  ]
+
+3. Access Config in Your Components
+import { Component, OnInit } from '@angular/core';
+import { ConfigService } from './services/config.service';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <h1>Angular 19 APP_INITIALIZER Example</h1>
+    <p>Check the console for loaded configuration!</p>
+  `,
+})
+export class AppComponent implements OnInit {
+  constructor(private configService: ConfigService) {}
+
+  ngOnInit(): void {
+    const config = this.configService.getConfig();
+    console.log('Config in component:', config);
+  }
+}
+
+
+
+
+Progressive Web App (PWA)
+=========================
+1. ng add @angular/pwa
+   -adds ngsw-config.json (Service Worker Config)
+   -adds manifest.webmanifest
+   -adds icons
+   
+2. Enable Service Worker (app.config.ts)
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000'
+    })
+	
+3. Build And Test
+   ng build --configuration production
+   npx http-server -p 8080 -c-1 dist/angular_project_unit_testing/browser
+   npx http-server -p 8080 -c-1 dist/task-tracker
+   
